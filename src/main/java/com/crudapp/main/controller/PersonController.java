@@ -46,10 +46,11 @@ public class PersonController {
 			System.out.println("obj"+obj);
 			return new ResponseEntity<Person>(person, HttpStatus.OK);
 	        
-	    } catch (CustomException customException) {
-	        System.out.print(customException);
-	    	return new ResponseEntity<Person>(HttpStatus.NOT_FOUND);
-	    }     
+	    } catch (Exception e) {
+			
+	        return new ResponseEntity<Person>(HttpStatus.NOT_FOUND);
+		}
+
 	    
 	}
 	
@@ -58,7 +59,7 @@ public class PersonController {
 		try{
 			Person person = service.getByName(personname);
 			return new ResponseEntity<Person>(person,HttpStatus.OK);
-		}catch (CustomException customException) {
+		}catch (Exception e) {
 			return new ResponseEntity<Person>(HttpStatus.NOT_FOUND);
 		}
 	}
@@ -68,17 +69,11 @@ public class PersonController {
 	
 		try{
 	        Person obj = new Person();
-			 obj.setid(person.getid());
-			 obj.setpersonname(person.getpersonname());
-			 obj.setEmail(person.getEmail());
-			 obj.setPassword(person.getPassword());
-			 Department dept = deptservice.getBydeptid(person.getDeptId());
-	         obj.setDepartment(dept);
-			 personrepo.save(obj);
+			 service.save(obj);
 			
-		}catch(CustomException customException)
+		}catch(Exception e)
 		{
-			throw new CustomException (customException);
+			throw e;
 		}
 	}
 	
@@ -88,7 +83,7 @@ public class PersonController {
 	        Person existingPerson = service.get(id);
 	        service.save(person);
 	        return new ResponseEntity<>(HttpStatus.OK);
-	    } catch (CustomException customException) {
+	    } catch (Exception e) {
 	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	    }      
 	}
@@ -104,8 +99,8 @@ public class PersonController {
 	public void delete(@PathVariable Integer id) throws Exception{
 	    try {
 		service.delete(id);
-	}catch(CustomException customException) {
-		throw new CustomException (customException);
+	}catch(Exception e) {
+		throw e;
 	}
 	}
 	

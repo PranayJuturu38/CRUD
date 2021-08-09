@@ -24,46 +24,50 @@ public class DepartmentController {
 	private DepartmentService deptservice;
 		
 	@GetMapping("/departments")
-	public List<Department> list(){
+	public List<Department> list() {
 		return deptservice.getAlldept();
 	}
 	
 	@GetMapping("/departments/{dept_id}")
-	public ResponseEntity<Department> get(@PathVariable Integer dept_id) throws Exception {
-	    try {
-	        Department dept = deptservice.getBydeptid(dept_id);
-	        return new ResponseEntity<Department>(dept, HttpStatus.OK);
+	public ResponseEntity<Department> get(@PathVariable Integer dept_id) throws CustomException {
+	
+	     	Department dept = deptservice.getBydeptid(dept_id);
+			return new ResponseEntity<Department>(dept, HttpStatus.OK);
 	        
-	    } catch (Exception e) {
-	    	return new ResponseEntity<Department>(HttpStatus.NOT_FOUND);
-	    }     
+	        }     
 	  
-	}
+	
 
 	@GetMapping("/departments/name/{name}")
-	public ResponseEntity<Object> getfromname(@PathVariable("name") String name) throws Exception {
+	public ResponseEntity<Object> getfromname(@PathVariable("name") String name) throws CustomException {
 		try{
 			Department dept = deptservice.getByName(name);
 			return new ResponseEntity<>(dept, HttpStatus.OK);
-		}catch (Exception customException) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}catch (Exception e) {
+		  throw e;
 		}
 	}
 
 	@GetMapping("/departments/locations/{location}")
 	public List<Department> getByLocation(@PathVariable("location") String location) throws Exception {
+	try{
 		return deptservice.getByLocation(location);
+	
+	}catch (Exception e){
+		throw e;
+
 	}
+}
 	
 	
 	@PostMapping("/departments")
 	public void add(@RequestBody Department dept ) throws Exception{
 		try{
 			deptservice.savedept(dept);
-		}catch(CustomException customException)
+		}catch(Exception e)
 		
 		{
-			throw new CustomException (customException);
+			throw e;
 		}
 	 
 	
@@ -83,12 +87,9 @@ public class DepartmentController {
 	
 	
 	@DeleteMapping("/departments/{dept_id}")
-	public void delete(@PathVariable Integer dept_id) throws Exception{
-	    try {
+	public void delete(@PathVariable Integer dept_id) throws CustomException{
+	    
 		deptservice.delete(dept_id);
-	}catch(CustomException customException) {
-		throw new CustomException (customException);
-	}
-	}
-	
+		
+		}
 }
