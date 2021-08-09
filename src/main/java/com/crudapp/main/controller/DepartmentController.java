@@ -79,6 +79,8 @@ public class DepartmentController {
 	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	    }      
 	}
+
+	
 	
 	@DeleteMapping("/departments/{dept_id}")
 	public void delete(@PathVariable Integer dept_id) throws Exception{

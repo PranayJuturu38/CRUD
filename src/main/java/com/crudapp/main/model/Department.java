@@ -15,6 +15,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name="department")
 public class Department {
@@ -28,10 +30,10 @@ public class Department {
 	@Column(name="location")
 	private String location;
 	
-   
-	// @OneToMany(mappedBy="department", cascade = CascadeType.ALL)
-	// private List<Person> persons = new ArrayList<Person>();
-
+     @JsonIgnore
+	 @OneToMany(mappedBy="department", cascade = CascadeType.ALL)
+	 private List<Person> persons = new ArrayList<Person>();
+	
 	public Department() {
 		
 	}
@@ -70,12 +72,8 @@ public Department(Integer dept_id, String name, String location) {
 	this.name = name;
 	this.location = location;
 }
-	// public List<Person> getPersons(){
-	// 	return persons;
-	// }
+	public List<Person> getPersons(){
+		return persons;
+	}
 
-	// public void setPersons(List<Person> persons){
-	// 	this.persons = persons;
-		
-	// }
 }

@@ -3,8 +3,12 @@ package com.crudapp.main.controller;
 import java.util.List;
 
 import com.crudapp.main.exception.CustomException;
+import com.crudapp.main.model.Department;
 import com.crudapp.main.model.Person;
+import com.crudapp.main.repository.PersonRepository;
+import com.crudapp.main.service.DepartmentService;
 import com.crudapp.main.service.PersonService;
+import com.crudapp.main.requestDTOs.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +25,11 @@ public class PersonController {
  
 	@Autowired
 	private PersonService service;
+	@Autowired
+	private DepartmentService deptservice;
+
+	@Autowired
+	private PersonRepository personrepo;
 	
 	@GetMapping("/persons")
 	public List<Person> list(){
@@ -32,7 +41,10 @@ public class PersonController {
 	public ResponseEntity<Person> get(@PathVariable Integer id) throws Exception {
 	    try {
 	        Person person = service.get(id);
-	        return new ResponseEntity<Person>(person, HttpStatus.OK);
+			Person obj = new Person();
+			//obj.setDepartment(person.getDepartment());
+			System.out.println("obj"+obj);
+			return new ResponseEntity<Person>(person, HttpStatus.OK);
 	        
 	    } catch (CustomException customException) {
 	        System.out.print(customException);
@@ -52,10 +64,18 @@ public class PersonController {
 	}
 	
 	@PostMapping("/persons")
-	public void add(@RequestBody Person person) throws Exception {
+	public void add(@RequestBody PersonDTo person) throws Exception {
 	
 		try{
-			service.save(person);
+	        Person obj = new Person();
+			 obj.setid(person.getid());
+			 obj.setpersonname(person.getpersonname());
+			 obj.setEmail(person.getEmail());
+			 obj.setPassword(person.getPassword());
+			 Department dept = deptservice.getBydeptid(person.getDeptId());
+	         obj.setDepartment(dept);
+			 personrepo.save(obj);
+			
 		}catch(CustomException customException)
 		{
 			throw new CustomException (customException);
@@ -72,6 +92,13 @@ public class PersonController {
 	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	    }      
 	}
+
+	@PutMapping("/persons/{id}/departments/{dept_id}")
+	 Person assignDept(@PathVariable Integer id,@PathVariable Integer dept_id) throws Exception{
+        Person person = service.get(id);
+		
+		return service.save(person);
+	 }
 	
 	@DeleteMapping("/persons/{id}")
 	public void delete(@PathVariable Integer id) throws Exception{

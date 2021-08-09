@@ -29,9 +29,10 @@ public class Person implements Serializable{
 	private String email;
 
     
-	// @ManyToOne
-	// //@JoinColumn(name="dept_id")
-	// private Department department;
+
+	@JoinColumn(name = "department", nullable = false)
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Department department;
 
 	
  public Person() {
@@ -79,11 +80,13 @@ public class Person implements Serializable{
 		this.email = email;
 	}	
 
-	// public Department getDepartment() {
-	// 	return department;
-	// }
+	public Department getDepartment() {
+		return department;
+	}
 
-	// public void setDepartment(Department department) {
-	// 	this.department = department;
-	// }
+	public void setDepartment(Department department) {
+		this.department = department;
+	}
+
+	
 }
