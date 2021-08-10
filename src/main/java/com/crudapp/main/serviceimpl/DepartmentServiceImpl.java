@@ -1,4 +1,4 @@
-package com.crudapp.main.service;
+package com.crudapp.main.serviceimpl;
 
 import java.util.List;
 import java.util.Optional;
@@ -6,12 +6,13 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import com.crudapp.main.exception.CustomException;
 import com.crudapp.main.model.Department;
 import com.crudapp.main.repository.Departmentrepository;
+import com.crudapp.main.service.DepartmentService;
+
 @Service
 @Transactional
 public class DepartmentServiceImpl implements DepartmentService{

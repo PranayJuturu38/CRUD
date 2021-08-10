@@ -1,4 +1,4 @@
-package com.crudapp.main.service;
+package com.crudapp.main.serviceimpl;
 
 import java.util.List;
 import java.util.Optional;
@@ -9,9 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.crudapp.main.exception.CustomException;
-import com.crudapp.main.model.Department;
 import com.crudapp.main.model.Person;
 import com.crudapp.main.repository.PersonRepository;
+import com.crudapp.main.service.PersonService;
+import com.crudapp.main.service.DepartmentService;
+
 
 @Service
 @Transactional

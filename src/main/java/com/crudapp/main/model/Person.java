@@ -87,6 +87,4 @@ public class Person implements Serializable{
 	public void setDepartment(Department department) {
 		this.department = department;
 	}
-
-	
 }
