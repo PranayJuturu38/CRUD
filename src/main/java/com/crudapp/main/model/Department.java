@@ -75,4 +75,8 @@ public Department(Integer dept_id, String name, String location) {
 		return persons;
 	}
 
+	public void setPersons(List<Person> persons){
+		this.persons = persons;
+	}
+
 }

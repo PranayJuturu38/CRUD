@@ -1,6 +1,7 @@
 package com.crudapp.main.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -30,8 +31,8 @@ public class Person implements Serializable{
 
     
 
-	@JoinColumn(name = "department", nullable = false)
 	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "dept_id")
 	private Department department;
 
 	

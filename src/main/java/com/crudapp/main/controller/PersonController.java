@@ -65,11 +65,10 @@ public class PersonController {
 	}
 	
 	@PostMapping("/persons")
-	public void add(@RequestBody PersonDTo person) throws Exception {
+	public void add(@RequestBody Person person) throws Exception {
 	
 		try{
-	        Person obj = new Person();
-			 service.save(obj);
+	         service.save(person);
 			
 		}catch(Exception e)
 		{

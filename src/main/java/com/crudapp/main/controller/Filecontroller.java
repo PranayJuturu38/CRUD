@@ -29,7 +29,7 @@ public class Filecontroller {
   @Autowired
   private FileService storageService;
 
-  @PostMapping("/upload")
+  @PostMapping("/upload")//Uploading the file
   public ResponseEntity<Message> uploadFile(@RequestParam("file") MultipartFile file) {
     String message = "";
     try {
@@ -67,7 +67,7 @@ public class Filecontroller {
     FileData fileDB = storageService.getFile(id);
 
     return ResponseEntity.ok()
-        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileDB.getName() + "\"")
+        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=testafter.txt")
         .body(fileDB.getData());
   }
 }

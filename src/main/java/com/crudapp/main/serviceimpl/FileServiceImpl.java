@@ -35,7 +35,9 @@ public class FileServiceImpl implements FileService {
     
     @Override
     public FileData store(MultipartFile file) throws IOException{
+        //Cleaning the path
         String fileName = StringUtils.cleanPath(file.getOriginalFilename()); 
+        //Storing the file details
         FileData FileData = new FileData(fileName,file.getContentType(),file.getBytes());
         return filerepo.save(FileData);
     }

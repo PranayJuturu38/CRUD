@@ -1,5 +1,6 @@
 package com.crudapp.main.serviceimpl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.crudapp.main.exception.CustomException;
 import com.crudapp.main.model.Department;
+import com.crudapp.main.model.Person;
 import com.crudapp.main.repository.Departmentrepository;
 import com.crudapp.main.service.DepartmentService;
 
@@ -21,17 +23,23 @@ public class DepartmentServiceImpl implements DepartmentService{
 	private Departmentrepository deptrepo;
 	@Override
 	public List<Department> getAlldept(){
-		return deptrepo.findAll();
+		List<Department> dept = deptrepo.findAll();
+		if(dept.size() > 0){
+			return dept;
+	}else{
+		return new ArrayList<Department>();
 	}
+}
 
 
 	@Override
 	public Department savedept(Department dept) throws CustomException{
-		Department obj = new Department();
-		obj.setDept_id(dept.getDept_id());
-		obj.setLocation(dept.getLocation());
-		obj.setName(dept.getName());
-		return deptrepo.save(obj);
+	
+		// obj.setDept_id(dept.getDept_id());
+		// obj.setLocation(dept.getLocation());
+		// obj.setName(dept.getName());
+		// obj.setPersons(dept.getPersons());
+		return deptrepo.save(dept);
 	}
 
 	@Override
