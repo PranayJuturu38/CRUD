@@ -53,6 +53,8 @@ public class Filecontroller {
           .toUriString();
 
       return new ResponseFile(
+          
+          dbFile.getId(),
           dbFile.getName(),
           fileDownloadUri,
           dbFile.getType(),
@@ -67,7 +69,15 @@ public class Filecontroller {
     FileData fileDB = storageService.getFile(id);
 
     return ResponseEntity.ok()
-        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=testafter.txt")
+        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;  filename=testafter.txt")
         .body(fileDB.getData());
   }
+
+  @GetMapping("/files/names/{name}")
+  public ResponseEntity<byte[]> getByName(@PathVariable("name") String name) 
+{
+  FileData fileDB = storageService.getByName(name);
+  return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,"attachment;  filename=testafter.txt").body(fileDB.getData());
+
+}
 }

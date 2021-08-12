@@ -52,4 +52,14 @@ public class FileServiceImpl implements FileService {
      return filerepo.findAll().stream();
     }
 
+    @Override
+    public FileData getByName(String name) throws CustomException {
+       FileData file = filerepo.getByName(name);
+       if(file != null) {
+           return file;
+       }else{
+           throw new CustomException("File not found with name:"+name);
+       }
+    }
+
 }

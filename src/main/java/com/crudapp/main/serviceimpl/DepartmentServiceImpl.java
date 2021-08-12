@@ -70,8 +70,8 @@ public class DepartmentServiceImpl implements DepartmentService{
 
 	@Override
 	public Department getByName(String name) throws CustomException{
-	    Department dept=deptrepo.getByName(name);
-		if(dept != null)
+	    Department dept= deptrepo.getByName(name);
+		if(dept !=null)
 		{
 		return dept;	
 	}
