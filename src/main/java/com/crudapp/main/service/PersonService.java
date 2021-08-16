@@ -10,7 +10,6 @@ import com.crudapp.main.model.Person;
 
 
 @Service
-@Transactional
 public interface PersonService  {
    
     List<Person> listAll(); 

@@ -1,7 +1,7 @@
 package com.crudapp.main.model;
 
 import java.io.Serializable;
-import java.util.List;
+
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -51,11 +51,12 @@ public class Person implements Serializable{
 		return "Person [email=" + email + ", id=" + id + ", password=" + password + ", personname=" + personname + "]";
 	}
 
-	public Person(Integer id, String personname, String password, String email) {
+	public Person(Integer id, String personname, String password, String email,Department department) {
 		this.id = id;
 		this.personname = personname;
 		this.password = password;
 		this.email = email;
+        this.department = department;
 	}
 
 	public void setid(Integer id) {

@@ -45,7 +45,6 @@ public class PersonServiceImpl implements PersonService {
 		obj.setpersonname(person.getpersonname());
 		obj.setEmail(person.getEmail());
 		obj.setPassword(person.getPassword());
-		obj.setDepartment(person.getDepartment());
 		
 		return repo.save(obj);
 	}

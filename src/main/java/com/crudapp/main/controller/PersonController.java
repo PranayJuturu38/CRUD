@@ -8,7 +8,6 @@ import com.crudapp.main.model.Person;
 import com.crudapp.main.repository.PersonRepository;
 import com.crudapp.main.service.DepartmentService;
 import com.crudapp.main.service.PersonService;
-import com.crudapp.main.requestDTOs.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,11 +24,7 @@ public class PersonController {
  
 	@Autowired
 	private PersonService service;
-	@Autowired
-	private DepartmentService deptservice;
 
-	@Autowired
-	private PersonRepository personrepo;
 	
 	@GetMapping("/persons")
 	public List<Person> list(){
@@ -83,7 +78,7 @@ public class PersonController {
 	        service.save(person);
 	        return new ResponseEntity<>(HttpStatus.OK);
 	    } catch (Exception e) {
-	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);//
 	    }      
 	}
 

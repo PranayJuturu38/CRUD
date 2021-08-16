@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import com.crudapp.main.exception.CustomException;
 import com.crudapp.main.model.Department;
-import com.crudapp.main.model.Person;
 import com.crudapp.main.repository.Departmentrepository;
 import com.crudapp.main.service.DepartmentService;
 
