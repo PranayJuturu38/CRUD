@@ -1,10 +1,9 @@
 package com.crudapp.main.service;
 
 import java.io.IOException;
-import java.util.List;
+
 import java.util.stream.Stream;
 
-import com.crudapp.main.exception.CustomException;
 import com.crudapp.main.model.FileData;
 
 import org.springframework.stereotype.Service;

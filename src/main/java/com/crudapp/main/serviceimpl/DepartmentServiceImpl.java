@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import com.crudapp.main.exception.CustomException;
 import com.crudapp.main.model.Department;
-import com.crudapp.main.model.Person;
 import com.crudapp.main.repository.Departmentrepository;
 import com.crudapp.main.service.DepartmentService;
 
@@ -35,11 +34,19 @@ public class DepartmentServiceImpl implements DepartmentService{
 	@Override
 	public Department savedept(Department dept) throws CustomException{
 	
-		// obj.setDept_id(dept.getDept_id());
-		// obj.setLocation(dept.getLocation());
-		// obj.setName(dept.getName());
-		// obj.setPersons(dept.getPersons());
-		return deptrepo.save(dept);
+		Optional<Department> newDept = deptrepo.findById(dept.getDept_id());
+		if(!newDept.isPresent()){
+            Department newDepartment = new Department();
+			newDepartment.setDept_id(dept.getDept_id());
+			newDepartment.setName(dept.getName());
+		    newDepartment.setLocation(dept.getLocation());
+			newDepartment.setPersons(dept.getPersons());
+
+			newDepartment = deptrepo.save(newDepartment);
+	        return newDepartment;
+		}else{
+            throw new CustomException("Department already exists");
+		}
 	}
 
 	@Override
@@ -87,13 +94,33 @@ public class DepartmentServiceImpl implements DepartmentService{
 	public List<Department> getByLocation(String location) throws CustomException
 	{
 	    List<Department> dept = deptrepo.getByLocation(location);
-		if(dept != null){
-		return dept;	
+		if(dept.isEmpty()){
+			throw new CustomException("No departments at location " + location);
+	
 	}
 	else{
-		throw new CustomException("No departments at location " + location);
+     	return dept;	
 	}
 }
+
+	@Override
+	public Department updatedept(Department dept) throws CustomException{
+      Optional<Department> existingdept = deptrepo.findById(dept.getDept_id());
+	  if(existingdept.isPresent()){
+		  Department updateddept = existingdept.get();
+		  updateddept.setName(dept.getName());
+		  updateddept.setLocation(dept.getLocation());
+		  updateddept.setPersons(dept.getPersons());
+
+		 updateddept = deptrepo.save(updateddept);
+		 return updateddept;
+	  }
+
+	else{
+         throw new CustomException("Department does not exist");
+	}
+		
+	}
 	
 
 }

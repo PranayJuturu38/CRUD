@@ -25,6 +25,7 @@ public class DepartmentController {
 		
 	@GetMapping("/departments")
 	public List<Department> list() {
+	
 		return deptservice.getAlldept();
 	}
 	
@@ -76,20 +77,19 @@ public class DepartmentController {
 	@PutMapping("/departments/{dept_id}")
 	public ResponseEntity<?> update(@RequestBody Department dept, @PathVariable Integer dept_id) throws Exception{
 	    try {
-	        Department existingdept = deptservice.getBydeptid(dept_id);
-	        deptservice.savedept(dept);
-	        return new ResponseEntity<>(HttpStatus.OK);
-	    } catch (CustomException customException) {
-	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	        deptservice.updatedept(dept);
+	    	return new ResponseEntity<>(HttpStatus.OK);
+	    } catch (Exception e) {
+	        throw e;
 	    }      
 	}
-
-	
 	
 	@DeleteMapping("/departments/{dept_id}")
 	public void delete(@PathVariable Integer dept_id) throws CustomException{
-	    
-		deptservice.delete(dept_id);
-		
-		}
+	    try{
+		deptservice.delete(dept_id);	
+	}catch (Exception e){
+        throw e;
+	}
+  }
 }

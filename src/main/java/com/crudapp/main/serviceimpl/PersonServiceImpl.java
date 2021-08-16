@@ -30,31 +30,42 @@ public class PersonServiceImpl implements PersonService {
 	public List<Person> listAll()  {
 	
 		if(repo.findAll() != null) {
-
-			throw new CustomException ("No records found");
-		} else{
 			return repo.findAll();
+		} else{
+			
+			throw new CustomException ("No records found");
 		}
 	}
 
 	
 	@Override
 	public Person save(Person person) {
-		Person obj = new Person();
-		obj.setid(person.getid());
-		obj.setpersonname(person.getpersonname());
-		obj.setEmail(person.getEmail());
-		obj.setPassword(person.getPassword());
-		obj.setDepartment(person.getDepartment());
+	
+		Optional<Person> exisitngPerson = repo.findById(person.getid());
+		if(!exisitngPerson.isPresent()){
+            Person newPerson = new Person();
+
+			newPerson.setid(person.getid());
+			newPerson.setpersonname(person.getpersonname());
+            newPerson.setPassword(person.getPassword());
+            newPerson.setEmail(person.getEmail());
+			newPerson.setDepartment(person.getDepartment());
+			
+			newPerson = repo.save(newPerson);
+	        
+			return newPerson;
 		
-		return repo.save(obj);
+		}else{
+            throw new CustomException("Person already exists");
+		}
 	}
 
 	@Override
 	public Person get(Integer id) throws CustomException{
-		Person person = repo.getById(id);
-		if(person != null){
-		return repo.getById(id);
+		Optional<Person> person = repo.findById(id);
+		if(person.isPresent()){
+	
+			return person.get();
 	}
 	else{
 		throw new CustomException("No person with id " + id );

@@ -6,13 +6,14 @@ import com.crudapp.main.exception.CustomException;
 import com.crudapp.main.model.Department;
 import com.crudapp.main.model.Person;
 import com.crudapp.main.repository.PersonRepository;
+
 import com.crudapp.main.service.DepartmentService;
 import com.crudapp.main.service.PersonService;
-import com.crudapp.main.requestDTOs.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,31 +26,27 @@ public class PersonController {
  
 	@Autowired
 	private PersonService service;
+
 	@Autowired
 	private DepartmentService deptservice;
 
-	@Autowired
-	private PersonRepository personrepo;
 	
 	@GetMapping("/persons")
 	public List<Person> list(){
 		
 		return service.listAll();
+	
 	}
 	
 	@GetMapping("/persons/{id}")
-	public ResponseEntity<Person> get(@PathVariable Integer id) throws Exception {
+	public ResponseEntity<Person> get(@PathVariable Integer id) throws CustomException {
 	    try {
 	        Person person = service.get(id);
-			Person obj = new Person();
-			//obj.setDepartment(person.getDepartment());
-			System.out.println("obj"+obj);
 			return new ResponseEntity<Person>(person, HttpStatus.OK);
 	        
 	    } catch (Exception e) {
-			
-	        return new ResponseEntity<Person>(HttpStatus.NOT_FOUND);
-		}
+			throw e;
+	    }
 
 	    
 	}
@@ -65,10 +62,11 @@ public class PersonController {
 	}
 	
 	@PostMapping("/persons")
-	public void add(@RequestBody Person person) throws Exception {
+	public void add(@Validated @RequestBody Person person) throws Exception {
 	
 		try{
-	         service.save(person);
+
+			 service.save(person); 
 			
 		}catch(Exception e)
 		{
@@ -76,24 +74,25 @@ public class PersonController {
 		}
 	}
 	
+	@PostMapping("/persons/{id}/departments/{dept_id}")
+	 Person assignDept(@PathVariable Integer id,@PathVariable Integer dept_id) throws Exception{
+        Person person = service.get(id);
+		Department dept = deptservice.getBydeptid(dept_id);
+	    person.setDepartment(dept);
+		return person;	
+	}
+	
+	
 	@PutMapping("/persons/{id}")
-	public ResponseEntity<?> update(@RequestBody Person person, @PathVariable Integer id) throws Exception{
-	    try {
-	        Person existingPerson = service.get(id);
+	public ResponseEntity<?> update(@Validated@RequestBody Person person, @PathVariable Integer id) throws Exception{
+	    try {                                                                                     
 	        service.save(person);
 	        return new ResponseEntity<>(HttpStatus.OK);
 	    } catch (Exception e) {
-	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);//
 	    }      
 	}
 
-	@PutMapping("/persons/{id}/departments/{dept_id}")
-	 Person assignDept(@PathVariable Integer id,@PathVariable Integer dept_id) throws Exception{
-        Person person = service.get(id);
-		
-		return service.save(person);
-	 }
-	
 	@DeleteMapping("/persons/{id}")
 	public void delete(@PathVariable Integer id) throws Exception{
 	    try {

@@ -1,8 +1,5 @@
 package com.crudapp.main.repository;
 
-
-
-
 import com.crudapp.main.model.Person;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,8 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PersonRepository extends JpaRepository<Person,Integer> {
-	
+public interface PersonRepository extends JpaRepository<Person, Integer> {
 
 	@Query("SELECT p FROM Person p WHERE p.personname = :personname")
 	public Person getByName(@Param("personname") String personname);

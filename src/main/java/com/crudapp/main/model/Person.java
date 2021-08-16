@@ -1,7 +1,5 @@
 package com.crudapp.main.model;
-
 import java.io.Serializable;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,10 +11,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-
 @Entity
 @Table(name="person")
-public class Person implements Serializable{
+public class Person  {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
 	private Integer id;
 
@@ -32,7 +31,7 @@ public class Person implements Serializable{
     
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "dept_id")
+	@JoinColumn(name = "department")
 	private Department department;
 
 	
@@ -41,23 +40,22 @@ public class Person implements Serializable{
 	}
 
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	public Integer getid() {
-		return id;
-	}
+	
 	@Override
 	public String toString() {
 		return "Person [email=" + email + ", id=" + id + ", password=" + password + ", personname=" + personname + "]";
 	}
 
-	public Person(Integer id, String personname, String password, String email) {
+	public Person(Integer id, String personname, String password, String email,Department department) {
 		this.id = id;
 		this.personname = personname;
 		this.password = password;
 		this.email = email;
+        this.department = department;
 	}
-
+	public Integer getid() {
+		return id;
+	}
 	public void setid(Integer id) {
 		this.id = id;
 	}
