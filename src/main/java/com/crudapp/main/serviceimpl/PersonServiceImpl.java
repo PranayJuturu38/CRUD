@@ -95,4 +95,23 @@ public class PersonServiceImpl implements PersonService {
 
 		}
 	}
+
+
+	@Override
+	public Person updateperson(Person person) {
+		Optional<Person> existingperson = repo.findById(person.getid());
+		if(existingperson.isPresent()){
+			Person updatedperson = existingperson.get();
+            updatedperson.setpersonname(person.getpersonname());
+            updatedperson.setPassword(person.getPassword());
+			updatedperson.setEmail(person.getEmail());
+			updatedperson.setDepartment(person.getDepartment());
+			updatedperson = repo.save(updatedperson);
+		   return updatedperson;
+		}
+  
+	  else{
+		   throw new CustomException("Person does not exist");
+	  }
+	}
 }

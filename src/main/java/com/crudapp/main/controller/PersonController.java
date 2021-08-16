@@ -86,11 +86,11 @@ public class PersonController {
 	@PutMapping("/persons/{id}")
 	public ResponseEntity<?> update(@Validated@RequestBody Person person, @PathVariable Integer id) throws Exception{
 	    try {                                                                                     
-	        service.save(person);
+	        service.updateperson(person);
 	        return new ResponseEntity<>(HttpStatus.OK);
 	    } catch (Exception e) {
-	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);//
-	    }      
+	    throw e;
+	}      
 	}
 
 	@DeleteMapping("/persons/{id}")
