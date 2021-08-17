@@ -18,4 +18,5 @@ public interface ProjectService {
 
     Project updateproject(Project project);
 
+    Project getByName(String name);
 }

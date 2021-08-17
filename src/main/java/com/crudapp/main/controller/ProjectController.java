@@ -3,6 +3,7 @@ package com.crudapp.main.controller;
 import java.util.List;
 
 import com.crudapp.main.message.Message;
+
 import com.crudapp.main.model.Project;
 import com.crudapp.main.service.ProjectService;
 
@@ -51,7 +52,18 @@ public class ProjectController {
             Project proj = projservice.getProjectById(id);
             return new ResponseEntity<Project>(proj, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<Project>(HttpStatus.EXPECTATION_FAILED);
+            throw e;
+        }
+    }
+
+    @GetMapping("/names/{name}")
+    public ResponseEntity<Project> getname(@PathVariable("name") String name) throws Exception {
+        try {
+            Project proj = projservice.getByName(name);
+            return new ResponseEntity<Project>(proj, HttpStatus.OK);
+
+        } catch (Exception e) {
+            throw e;
         }
     }
 }

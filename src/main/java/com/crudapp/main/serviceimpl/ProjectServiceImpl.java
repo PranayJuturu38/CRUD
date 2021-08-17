@@ -87,4 +87,14 @@ public class ProjectServiceImpl implements ProjectService {
         }
 
     }
+
+    @Override
+    public Project getByName(String name) throws CustomException{
+        Project proj = projectrepo.getByName(name);
+        if(proj != null) {
+            return proj;
+        }else{
+            throw new CustomException("No project found with name " + name);
+        }
+    }
 }
