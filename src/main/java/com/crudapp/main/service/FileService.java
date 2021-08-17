@@ -13,7 +13,10 @@ import org.springframework.web.multipart.MultipartFile;
 public interface FileService {
 
     FileData store(MultipartFile file) throws IOException;
+
     FileData getFile(String id);
+
     Stream<FileData> getAllFile();
-    FileData getByName(String name) ;
+
+    FileData getByName(String name);
 }

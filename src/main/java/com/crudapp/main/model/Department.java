@@ -1,8 +1,5 @@
 package com.crudapp.main.model;
 
-
-
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,35 +15,33 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name="department")
+@Table(name = "department")
 public class Department {
-  
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="dept_id")
+	@Column(name = "dept_id")
 	private Integer dept_id;
-	@Column(name="name")
+	@Column(name = "name")
 	private String name;
-	@Column(name="location")
+	@Column(name = "location")
 	private String location;
-	
-     @JsonIgnore
-	 @OneToMany(mappedBy="department", cascade = CascadeType.ALL)
-	 private List<Person> persons = new ArrayList<Person>();
-	
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "department", cascade = CascadeType.ALL)
+	private List<Person> persons = new ArrayList<Person>();
+
 	public Department() {
-		
+
 	}
 
 	public Integer getDept_id() {
 		return dept_id;
 	}
 
-
 	public void setDept_id(Integer dept_id) {
 		this.dept_id = dept_id;
 	}
-
 
 	public String getName() {
 		return name;
@@ -64,19 +59,17 @@ public class Department {
 		this.location = location;
 	}
 
-    
-	
+	public Department(Integer dept_id, String name, String location) {
+		this.dept_id = dept_id;
+		this.name = name;
+		this.location = location;
+	}
 
-public Department(Integer dept_id, String name, String location) {
-	this.dept_id = dept_id;
-	this.name = name;
-	this.location = location;
-}
-	public List<Person> getPersons(){
+	public List<Person> getPersons() {
 		return persons;
 	}
 
-	public void setPersons(List<Person> persons){
+	public void setPersons(List<Person> persons) {
 		this.persons = persons;
 	}
 

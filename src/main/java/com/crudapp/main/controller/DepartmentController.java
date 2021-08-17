@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.crudapp.main.exception.CustomException;
+import com.crudapp.main.message.Message;
 import com.crudapp.main.model.Department;
 import com.crudapp.main.service.DepartmentService;
 
@@ -22,74 +23,87 @@ public class DepartmentController {
 
 	@Autowired
 	private DepartmentService deptservice;
-		
+
 	@GetMapping("/departments")
 	public List<Department> list() {
-	
+
 		return deptservice.getAlldept();
 	}
-	
+
 	@GetMapping("/departments/{dept_id}")
 	public ResponseEntity<Department> get(@PathVariable Integer dept_id) throws CustomException {
-	
-	     	Department dept = deptservice.getBydeptid(dept_id);
-			return new ResponseEntity<Department>(dept, HttpStatus.OK);
-	        
-	        }     
-	  
-	
+    
+		Department dept = deptservice.getBydeptid(dept_id);
+		return new ResponseEntity<Department>(dept, HttpStatus.OK);
+
+	}
 
 	@GetMapping("/departments/name/{name}")
 	public ResponseEntity<Object> getfromname(@PathVariable("name") String name) throws CustomException {
-		try{
+		try {
 			Department dept = deptservice.getByName(name);
 			return new ResponseEntity<>(dept, HttpStatus.OK);
-		}catch (Exception e) {
-		  throw e;
+		} catch (Exception e) {
+			throw e;
 		}
 	}
 
 	@GetMapping("/departments/locations/{location}")
 	public List<Department> getByLocation(@PathVariable("location") String location) throws Exception {
-	try{
-		return deptservice.getByLocation(location);
-	
-	}catch (Exception e){
-		throw e;
+		try {
+			return deptservice.getByLocation(location);
+
+		} catch (Exception e) {
+			throw e;
+
+		}
+	}
+
+	@PostMapping("/departments")
+	public ResponseEntity<Message> add(@RequestBody Department dept) throws Exception {
+		String message = "";
+		try {
+			deptservice.savedept(dept);
+			message = "Department added with id: " + dept.getDept_id();
+			return ResponseEntity.status(HttpStatus.OK).body(new Message(message));
+
+		} catch (Exception e)
+
+		{
+			message = "Department could not be added:" +e.getMessage();
+			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new Message(message));
+
+		}
 
 	}
-}
-	
-	
-	@PostMapping("/departments")
-	public void add(@RequestBody Department dept ) throws Exception{
-		try{
-			deptservice.savedept(dept);
-		}catch(Exception e)
-		
-		{
-			throw e;
-		}
-	 
-	
-	}
-	
+
 	@PutMapping("/departments/{dept_id}")
-	public ResponseEntity<?> update(@RequestBody Department dept, @PathVariable Integer dept_id) throws Exception{
-	    try {
-	        deptservice.updatedept(dept);
-	    	return new ResponseEntity<>(HttpStatus.OK);
-	    } catch (Exception e) {
-	        throw e;
-	    }      
+	public ResponseEntity<Message> update(@RequestBody Department dept, @PathVariable Integer dept_id)
+			throws Exception {
+		String message = "";
+		try {
+			deptservice.updatedept(dept);
+			message = "Updated Department-" + dept_id + "Successfully";
+			return ResponseEntity.status(HttpStatus.OK).body(new Message(message));
+		} catch (Exception e) {
+
+			message = "Update failed:" +e.getMessage();
+			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new Message(message));
+
+		}
 	}
-	
+
 	@DeleteMapping("/departments/{dept_id}")
-	public void delete(@PathVariable Integer dept_id) throws CustomException{
-	    try{
-		deptservice.delete(dept_id);	
-	}catch (Exception e){
-        throw e;
+	public ResponseEntity<Message> delete(@PathVariable Integer dept_id) throws CustomException {
+		String message = "";
+		try {
+
+			deptservice.delete(dept_id);
+			message = "Deleted Department-" + dept_id + "Successfully";
+			return ResponseEntity.status(HttpStatus.OK).body(new Message(message));
+		} catch (Exception e) {
+			message = "Couldn't delete the department"+e.getMessage();
+			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new Message(message));
+		}
 	}
-  }
 }

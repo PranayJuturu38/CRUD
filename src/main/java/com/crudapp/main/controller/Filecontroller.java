@@ -1,4 +1,5 @@
 package com.crudapp.main.controller;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,12 +16,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-
 import com.crudapp.main.message.Message;
 import com.crudapp.main.message.ResponseFile;
 import com.crudapp.main.model.FileData;
 import com.crudapp.main.service.FileService;
-
 
 @Controller
 
@@ -29,7 +28,7 @@ public class Filecontroller {
   @Autowired
   private FileService storageService;
 
-  @PostMapping("/upload")//Uploading the file
+  @PostMapping("/upload") // Uploading the file
   public ResponseEntity<Message> uploadFile(@RequestParam("file") MultipartFile file) {
     String message = "";
     try {
@@ -46,19 +45,12 @@ public class Filecontroller {
   @GetMapping("/files")
   public ResponseEntity<List<ResponseFile>> getListFiles() {
     List<ResponseFile> files = storageService.getAllFile().map(dbFile -> {
-      String fileDownloadUri = ServletUriComponentsBuilder
-          .fromCurrentContextPath()
-          .path("/files/")
-          .path(dbFile.getId())
+      String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/files/").path(dbFile.getId())
           .toUriString();
 
       return new ResponseFile(
-          
-          dbFile.getId(),
-          dbFile.getName(),
-          fileDownloadUri,
-          dbFile.getType(),
-          dbFile.getData().length);
+
+          dbFile.getId(), dbFile.getName(), fileDownloadUri, dbFile.getType(), dbFile.getData().length);
     }).collect(Collectors.toList());
 
     return ResponseEntity.status(HttpStatus.OK).body(files);
@@ -68,16 +60,15 @@ public class Filecontroller {
   public ResponseEntity<byte[]> getFile(@PathVariable String id) {
     FileData fileDB = storageService.getFile(id);
 
-    return ResponseEntity.ok()
-        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;  filename=testafter.txt")
+    return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment;  filename=testafter.txt")
         .body(fileDB.getData());
   }
 
   @GetMapping("/files/names/{name}")
-  public ResponseEntity<byte[]> getByName(@PathVariable("name") String name) 
-{
-  FileData fileDB = storageService.getByName(name);
-  return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,"attachment;  filename=testafter.txt").body(fileDB.getData());
+  public ResponseEntity<byte[]> getByName(@PathVariable("name") String name) {
+    FileData fileDB = storageService.getByName(name);
+    return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment;  filename=testafter.txt")
+        .body(fileDB.getData());
 
-}
+  }
 }

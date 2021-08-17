@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import java.util.stream.Stream;
 
-
 import javax.transaction.Transactional;
 
 import org.springframework.util.StringUtils;
@@ -24,34 +23,34 @@ import com.crudapp.main.service.FileService;
 public class FileServiceImpl implements FileService {
     @Autowired
     private FilesDatarepository filerepo;
-    
+
     @Override
-    public FileData store(MultipartFile file) throws IOException{
-        //Cleaning the path
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename()); 
-        //Storing the file details
-        FileData FileData = new FileData(fileName,file.getContentType(),file.getBytes());
+    public FileData store(MultipartFile file) throws IOException {
+        // Cleaning the path
+        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+        // Storing the file details
+        FileData FileData = new FileData(fileName, file.getContentType(), file.getBytes());
         return filerepo.save(FileData);
     }
 
     @Override
     public FileData getFile(String id) {
-       return filerepo.findById(id).get();
+        return filerepo.findById(id).get();
     }
 
     @Override
     public Stream<FileData> getAllFile() {
-     return filerepo.findAll().stream();
+        return filerepo.findAll().stream();
     }
 
     @Override
     public FileData getByName(String name) throws CustomException {
-       FileData file = filerepo.getByName(name);
-       if(file != null) {
-           return file;
-       }else{
-           throw new CustomException("File not found with name:"+name);
-       }
+        FileData file = filerepo.getByName(name);
+        if (file != null) {
+            return file;
+        } else {
+            throw new CustomException("File not found with name:" + name);
+        }
     }
 
 }

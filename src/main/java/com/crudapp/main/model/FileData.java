@@ -22,7 +22,7 @@ public class FileData {
   private String type;
 
   @Lob
-  @Column(name = "data", columnDefinition="BLOB")
+  @Column(name = "data", columnDefinition = "BLOB")
   private byte[] data;
 
   public FileData() {
