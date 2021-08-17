@@ -35,7 +35,8 @@ public class PersonServiceImpl implements PersonService {
 	public Person save(Person person) {
 
 		Optional<Person> exisitngPerson = repo.findById(person.getid());
-		if (!exisitngPerson.isPresent()) {
+		
+		if (!exisitngPerson.isPresent() ) {
 			Person newPerson = new Person();
 
 			newPerson.setid(person.getid());
@@ -43,7 +44,7 @@ public class PersonServiceImpl implements PersonService {
 			newPerson.setPassword(person.getPassword());
 			newPerson.setEmail(person.getEmail());
 			newPerson.setDepartment(person.getDepartment());
-
+            newPerson.setProject(person.getProject());
 			newPerson = repo.save(newPerson);
 
 			return newPerson;
@@ -94,6 +95,8 @@ public class PersonServiceImpl implements PersonService {
 			updatedperson.setPassword(person.getPassword());
 			updatedperson.setEmail(person.getEmail());
 			updatedperson.setDepartment(person.getDepartment());
+            updatedperson.setProject(person.getProject());
+
 			updatedperson = repo.save(updatedperson);
 			return updatedperson;
 		}

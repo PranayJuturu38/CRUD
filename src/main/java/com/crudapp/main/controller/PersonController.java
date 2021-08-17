@@ -4,10 +4,7 @@ import java.util.List;
 
 import com.crudapp.main.exception.CustomException;
 import com.crudapp.main.message.Message;
-import com.crudapp.main.model.Department;
 import com.crudapp.main.model.Person;
-
-import com.crudapp.main.service.DepartmentService;
 import com.crudapp.main.service.PersonService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +24,6 @@ public class PersonController {
 
 	@Autowired
 	private PersonService service;
-
-	@Autowired
-	private DepartmentService deptservice;
 
 	@GetMapping("/persons")
 	public List<Person> list() {
