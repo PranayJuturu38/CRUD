@@ -33,16 +33,14 @@ public class PersonController {
 	}
 
 	@GetMapping("/persons/{id}")
-	public ResponseEntity<Person> get(@PathVariable Integer id) throws CustomException {
-		try {
-			Person person = service.get(id);
-			return new ResponseEntity<Person>(person, HttpStatus.OK);
+	public ResponseEntity<Object> get(@PathVariable Integer id) throws CustomException {
+       try{
+		return new ResponseEntity<Object>(service.get(id),HttpStatus.OK);
 
-		} catch (Exception e) {
-			return new ResponseEntity<Person>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-
+	}catch (Exception e) {
+		return new ResponseEntity<Object>(service.get(id),HttpStatus.NOT_FOUND);
 	}
+}
 
 	@GetMapping("/persons/name/{personname}")
 	public ResponseEntity<Person> getfromname(@PathVariable("personname") String personname) throws Exception {

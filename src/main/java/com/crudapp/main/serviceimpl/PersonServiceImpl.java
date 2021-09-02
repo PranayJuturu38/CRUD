@@ -6,8 +6,11 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.crudapp.main.ApiResponse.UtilMethods;
 import com.crudapp.main.exception.CustomException;
 import com.crudapp.main.model.Person;
 import com.crudapp.main.repository.PersonRepository;
@@ -19,6 +22,8 @@ public class PersonServiceImpl implements PersonService {
 
 	@Autowired
 	private PersonRepository repo;
+
+	private UtilMethods util = new UtilMethods();
 
 	@Override
 	public List<Person> listAll() {
@@ -35,8 +40,8 @@ public class PersonServiceImpl implements PersonService {
 	public Person save(Person person) {
 
 		Optional<Person> exisitngPerson = repo.findById(person.getid());
-		
-		if (!exisitngPerson.isPresent() ) {
+
+		if (!exisitngPerson.isPresent()) {
 			Person newPerson = new Person();
 
 			newPerson.setid(person.getid());
@@ -44,7 +49,7 @@ public class PersonServiceImpl implements PersonService {
 			newPerson.setPassword(person.getPassword());
 			newPerson.setEmail(person.getEmail());
 			newPerson.setDepartment(person.getDepartment());
-            newPerson.setProject(person.getProject());
+			newPerson.setProject(person.getProject());
 			newPerson = repo.save(newPerson);
 
 			return newPerson;
@@ -55,13 +60,17 @@ public class PersonServiceImpl implements PersonService {
 	}
 
 	@Override
-	public Person get(Integer id) throws CustomException {
+	public ResponseEntity<Object> get(Integer id) throws CustomException {
+
 		Optional<Person> person = repo.findById(id);
+
 		if (person.isPresent()) {
 
-			return person.get();
+			return util.modifyResponseObject(person.get(), "Found Data");
+
 		} else {
-			throw new CustomException("No person with id " + id);
+
+		  return new ResponseEntity<Object>("Not Found",HttpStatus.NOT_FOUND);
 		}
 	}
 
@@ -95,7 +104,7 @@ public class PersonServiceImpl implements PersonService {
 			updatedperson.setPassword(person.getPassword());
 			updatedperson.setEmail(person.getEmail());
 			updatedperson.setDepartment(person.getDepartment());
-            updatedperson.setProject(person.getProject());
+			updatedperson.setProject(person.getProject());
 
 			updatedperson = repo.save(updatedperson);
 			return updatedperson;

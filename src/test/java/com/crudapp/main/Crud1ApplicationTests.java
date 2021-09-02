@@ -1,4 +1,5 @@
 package com.crudapp.main;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -6,7 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 class Crud1ApplicationTests {
 
 	@Test
-	void integratedTest(){
+	void integratedTest() {
 
 	}
 

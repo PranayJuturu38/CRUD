@@ -57,13 +57,13 @@ public class ProjectController {
     }
 
     @GetMapping("/names/{name}")
-    public ResponseEntity<Project> getname(@PathVariable("name") String name) throws Exception {
+    public ResponseEntity<Project> getfromname(@PathVariable("name") String name) throws Exception {
         try {
             Project proj = projservice.getByName(name);
             return new ResponseEntity<Project>(proj, HttpStatus.OK);
 
         } catch (Exception e) {
-            throw e;
+            return new ResponseEntity<Project>(HttpStatus.NOT_FOUND);
         }
     }
 }

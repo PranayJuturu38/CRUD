@@ -13,7 +13,7 @@ public interface PersonService {
 
     Person save(Person person);
 
-    Person get(Integer id);
+    Object get(Integer id);
 
     void delete(Integer id);
 
