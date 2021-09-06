@@ -2,11 +2,16 @@ package com.crudapp.main;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.mockito.Mockito.when;
+
+import java.util.Optional;
 
 import com.crudapp.main.model.Project;
+import com.crudapp.main.repository.Projectrepository;
 import com.crudapp.main.service.ProjectService;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -16,8 +21,11 @@ public class ProjectTests {
 	@Autowired
 	private ProjectService projectService;
 
-	// @Autowired
-	// private MockMvc mockMvc;
+    @Autowired
+	private Projectrepository projectRepo;
+
+	@Mock
+	Projectrepository mockProjectRepository;
 
 	@Test // POST Mapping "/projects" Happy TestCase
 	void projectSaved() {
@@ -39,7 +47,10 @@ public class ProjectTests {
 		project.setName("MobileApplication");
 		project.setDescription("used by patients");
 
-		assertEquals(1, project.getId());
+		projectService.saveproject(project);
+
+	    when(mockProjectRepository.findById(1)).thenReturn(Optional.of(project));
+		assertEquals(projectService.getProjectById(1), project.getId());
 	}
 
 	@Test // Project get by id unhappy

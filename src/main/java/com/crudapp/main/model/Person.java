@@ -10,9 +10,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.crudapp.main.service.PersonService;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
 @Entity
 @Table(name = "person")
 public class Person {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -100,4 +105,6 @@ public class Person {
 	public void setDepartment(Department department) {
 		this.department = department;
 	}
+
+	
 }

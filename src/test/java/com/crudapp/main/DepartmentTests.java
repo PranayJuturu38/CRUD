@@ -29,25 +29,25 @@ public class DepartmentTests {
 		assertEquals(savedDept.getDept_id(), dept.getDept_id());
 	}
 
-	@Test // POST Mapping "/departments" Unhappy Test Case
-	Department DeptNotSaved() throws Exception {
-		Department dept1 = new Department();
-		dept1.setDept_id(1);
-		dept1.setName("admin");
-		dept1.setLocation("main");
+	// @Test // POST Mapping "/departments" Unhappy Test Case
+	// Department DeptNotSaved() throws Exception {
+	// Department dept1 = new Department();
+	// dept1.setDept_id(1);
+	// dept1.setName("admin");
+	// dept1.setLocation("main");
 
-		Department dept2 = new Department(1, "admin", "main");
+	// Department dept2 = new Department(1, "admin", "main");
 
-		Department savedDept1 = deptservice.savedept(dept1);
-		Department savedDept2 = deptservice.savedept(dept2);
+	// Department savedDept1 = deptservice.savedept(dept1);
+	// Department savedDept2 = deptservice.savedept(dept2);
 
-		try {
-			assertEquals(savedDept1.getDept_id(), savedDept2.getDept_id());
-		} catch (Exception e) {
-			throw e;
-		}
-		return savedDept2;
-	}
+	// try {
+	// assertEquals(savedDept1.getDept_id(), savedDept2.getDept_id());
+	// } catch (Exception e) {
+	// throw e;
+	// }
+	// return savedDept2;
+	// }
 
 	@Test // Department get by id
 	void deptId() {
@@ -67,12 +67,12 @@ public class DepartmentTests {
 		dept.setLocation("main");
 
 		Object returneddept = new Department();
-        try {
-            deptservice.getBydeptid(2);
+		try {
+			deptservice.getBydeptid(2);
 
-        } catch (Exception e) {
-            assertFalse(returneddept == null, "Department not be found");
-        }
+		} catch (Exception e) {
+			assertFalse(returneddept == null, "Department not be found");
+		}
 	}
 
 	@Test // Department get by name
@@ -94,11 +94,11 @@ public class DepartmentTests {
 		Object returneddept = new Department();
 
 		try {
-            deptservice.getByName("reddy");
+			deptservice.getByName("reddy");
 
-        } catch (Exception e) {
-            assertFalse(returneddept == null, "Department not be found");
-        }
+		} catch (Exception e) {
+			assertFalse(returneddept == null, "Department not be found");
+		}
 
 	}
 
@@ -117,7 +117,7 @@ public class DepartmentTests {
 	}
 
 	@Test //
-	void deptnolocation(){
+	void deptnolocation() {
 		Department dept = new Department();
 		dept.setDept_id(1);
 		dept.setName("admin");
@@ -125,11 +125,11 @@ public class DepartmentTests {
 		Object returneddept = new Department();
 
 		try {
-            deptservice.getByLocation("location");
+			deptservice.getByLocation("location");
 
-        } catch (Exception e) {
-            assertFalse(returneddept == null, "Department not be found");
-        }
+		} catch (Exception e) {
+			assertFalse(returneddept == null, "Department not be found");
+		}
 
 	}
 }

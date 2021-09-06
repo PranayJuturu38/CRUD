@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import com.crudapp.main.exception.CustomException;
 import com.crudapp.main.model.FileData;
 import com.crudapp.main.repository.FilesDatarepository;
 import com.crudapp.main.service.FileService;
@@ -49,5 +50,15 @@ public class FileTestCases {
 
 		FileData file = mock.getFile("C:/Users/Dev/Documents/Kpi Stuff/test.txt");
 		assertEquals("text/plain", file.getType());
+	}
+
+	@Test
+	public void getFileNameTest() throws IOException {
+	
+		when(mock.getByName("test.txt")).thenThrow(new CustomException("File not found"));
+
+		FileData file = mock.getByName("test.txt");
+		
+		
 	}
 }
