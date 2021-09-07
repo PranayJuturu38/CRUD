@@ -14,6 +14,7 @@ import com.crudapp.main.repository.FilesDatarepository;
 import com.crudapp.main.service.FileService;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -21,9 +22,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class FileTestCases {
 
 	@Autowired
-	private FilesDatarepository fileRepository;
+	private FileService fileService;
 
-	FileService mock = org.mockito.Mockito.mock(FileService.class);
+	@Autowired
+	private FilesDatarepository fileRepo;
+
+	@Mock
+	FilesDatarepository mockFileRepo;
 
 	// Saving File happy testcase
 	@Test
@@ -34,31 +39,35 @@ public class FileTestCases {
 
 		FileData fd = new FileData("test.txt", "text/plain", data);
 
-		FileData fd1 = fileRepository.save(fd);
+		FileData fd1 = fileRepo.save(fd);
 		assertEquals("text/plain", fd1.getType());
 
 	}
 
 	// Getting the file happy test
-	@Test
-	public void getFileTest() throws IOException {
+	// @Test
+	// public void getFileTest() throws IOException {
+	// Path path = Paths.get("C:/Users/Dev/Documents/Kpi Stuff/test.txt");
+	// byte[] data = Files.readAllBytes(path);
+
+	// when(mock.getFile("C:/Users/Dev/Documents/Kpi Stuff/test.txt"))
+	// .thenReturn(new FileData("test.txt", "text/plain", data));
+
+	// FileData file = mock.getFile("C:/Users/Dev/Documents/Kpi Stuff/test.txt");
+	// assertEquals("text/plain", file.getType());
+	// }
+
+	@Test // Getting a file by name //mockito
+	public void getFileNameTest() throws IOException {
+
 		Path path = Paths.get("C:/Users/Dev/Documents/Kpi Stuff/test.txt");
 		byte[] data = Files.readAllBytes(path);
 
-		when(mock.getFile("C:/Users/Dev/Documents/Kpi Stuff/test.txt"))
-				.thenReturn(new FileData("test.txt", "text/plain", data));
+		FileData file1 = new FileData("test.txt", "text/plain", data);
 
-		FileData file = mock.getFile("C:/Users/Dev/Documents/Kpi Stuff/test.txt");
-		assertEquals("text/plain", file.getType());
-	}
+		when(mockFileRepo.getByName("test.txt")).thenReturn(file1);
 
-	@Test
-	public void getFileNameTest() throws IOException {
-	
-		when(mock.getByName("test.txt")).thenThrow(new CustomException("File not found"));
-
-		FileData file = mock.getByName("test.txt");
-		
-		
+		fileRepo.save(file1);
+		assertEquals(fileService.getByName("test.txt").getName(), file1.getName());
 	}
 }

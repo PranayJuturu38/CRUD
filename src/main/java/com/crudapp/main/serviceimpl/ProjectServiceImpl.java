@@ -55,6 +55,7 @@ public class ProjectServiceImpl implements ProjectService {
         if (proj.isPresent()) {
 
             return proj.get();
+
         } else {
             throw new CustomException("No projects found with id:" + id);
         }
@@ -71,7 +72,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public Project updateproject(Project project) throws CustomException{
+    public Project updateproject(Project project) throws CustomException {
         Optional<Project> existingproj = projectrepo.findById(project.getId());
         if (existingproj.isPresent()) {
             Project updatedproj = existingproj.get();
@@ -89,11 +90,11 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public Project getByName(String name) throws CustomException{
+    public Project getByName(String name) throws CustomException {
         Project proj = projectrepo.getByName(name);
-        if(proj != null) {
+        if (proj != null) {
             return proj;
-        }else{
+        } else {
             throw new CustomException("No project found with name " + name);
         }
     }

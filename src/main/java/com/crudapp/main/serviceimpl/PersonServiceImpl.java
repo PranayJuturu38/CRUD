@@ -15,6 +15,7 @@ import com.crudapp.main.exception.CustomException;
 import com.crudapp.main.model.Person;
 import com.crudapp.main.repository.PersonRepository;
 import com.crudapp.main.service.PersonService;
+import com.google.gson.Gson;
 
 @Service
 @Transactional
@@ -70,7 +71,7 @@ public class PersonServiceImpl implements PersonService {
 
 		} else {
 
-		  return new ResponseEntity<Object>("Not Found",HttpStatus.NOT_FOUND);
+			return new ResponseEntity<Object>("Not Found", HttpStatus.NOT_FOUND);
 		}
 	}
 

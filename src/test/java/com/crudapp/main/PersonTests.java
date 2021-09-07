@@ -1,85 +1,92 @@
 package com.crudapp.main;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.crudapp.main.exception.CustomException;
 import com.crudapp.main.model.Department;
 import com.crudapp.main.model.Person;
+import com.crudapp.main.model.Project;
 import com.crudapp.main.repository.PersonRepository;
 import com.crudapp.main.service.PersonService;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-
+import org.springframework.http.ResponseEntity;
 
 @SpringBootTest
 public class PersonTests {
 
     @Autowired
-    private PersonService personservice;
-
-    @Autowired
-     private PersonRepository repo;
-
+    private PersonService personService;
     @Mock
     PersonRepository personMockRepo;
-        
-    @Test // POST Mapping "/persons" Happy TestCase
+
+    @Test // POST Mapping "/persons" Happy TestCase //mockito
     void personSaved() {
-        Person person = new Person();
+        Person expectedPerson = new Person();
 
-        // List<Person> persons = new ArrayList<Person>();
-        // Person p1 = new Person(1,"pranay","123","abc@gmail.com", null);
-        // Person p2 = new Person(2,"reddy","123","123@gmail.com",null);
+        expectedPerson.setid(1);
+        expectedPerson.setpersonname("pranay");
+        expectedPerson.setPassword("password");
+        expectedPerson.setEmail("email");
 
-        // personservice.save(p1);
+        when(personMockRepo.save(expectedPerson)).thenReturn(expectedPerson);
 
-        // when(mockservice.save(p1)).thenReturn(p1);
-        // assertEquals(p1,personservice.get(1));
-       
-        person.setid(1);
-        person.setpersonname("pranay");
-        person.setPassword("password");
-        person.setEmail("email");
+        Person actualPerson = personService.save(expectedPerson);
 
-        Person savedperson = new Person();
-        savedperson = personservice.save(person);
-
-        assertEquals(savedperson.getid(), person.getid());
+        assertEquals(expectedPerson.getid(), actualPerson.getid());
 
     }
 
-    @Test // Person get by id "/Persons/{id}"
-    void personID() {
+    @Test // Person SAve Unhappy TestCases //mockito //
+    void personNotSaved() throws Exception {
+        Person expectedPerson = new Person();
+        expectedPerson.setid(1);
+        expectedPerson.setpersonname("pranay");
+        expectedPerson.setPassword("password");
+        expectedPerson.setEmail("email");
 
-        Person person = new Person();
-        person.setid(1);
-        person.setpersonname("pranay");
-        person.setPassword("password");
-        person.setEmail("email");
+        when(personMockRepo.save(expectedPerson)).thenReturn(expectedPerson);
 
-        Person p1 = new Person(1,"pranay","123","abc@gmail.com", null);
-        
-        when(personMockRepo.findById(1)).thenReturn(Optional.of(person));
+        Person actualPerson = personService.save(expectedPerson);
+        assertFalse(expectedPerson.equals(actualPerson));
+    }
 
-        assertEquals(personservice.get(1), person.getid());
+    @Test // Person get by id "/Persons/{id}" //Parse through ResponseEntity
+    void personID() throws IOException {
+
+        Person expectedPerson = new Person();
+        expectedPerson.setid(1);
+        expectedPerson.setpersonname("pranay");
+        expectedPerson.setPassword("password");
+        expectedPerson.setEmail("email");
+
+        when(personMockRepo.findById(expectedPerson.getid())).thenReturn(Optional.of(expectedPerson));
+
+        personService.save(expectedPerson);
+
+        ResponseEntity<Object> actualPerson = (ResponseEntity<Object>) personService.get(1);
+        // Gson gson = new Gson();
+        // gson.toJson(actualPerson,new FileWriter("C:\\Users\\Dev\\Documents\\Kpi
+        // Stuff\\obj.json"));
+        // Gson gsonbuilder = new GsonBuilder().setPrettyPrinting().create();
+        assertEquals(actualPerson.getStatusCode(), expectedPerson);
+        // Json
+
     }
 
     @Test // Person get by id "/Persons/{id}" unhappy
     void personNoID() {
 
-        Person person = new Person();
+        // Person person = new Person();
         // person.setid(1);
         // person.setpersonname("pranay");
         // person.setPassword("password");
@@ -93,36 +100,85 @@ public class PersonTests {
         // assertFalse(returnedPerson != null, "Person not be found");
 
         // }
-         
+
     }
 
-    @Test // Person get by name "/persons/names/{name}"
-    void personName() {
-        Person person = new Person();
-        person.setid(1);
-        person.setpersonname("pranay");
-        person.setPassword("password");
-        person.setEmail("email");
+    @Test // GetAll Persons
+    void getAllPersons() {
 
-        assertEquals("pranay", person.getpersonname());
+        List<Person> expectedPerson = new ArrayList<Person>();
+        Person p1 = new Person(1, "Pranay", "123", "abc@gmail.com", new Department(1, "HR", "main"),
+                new Project(1, "mobile", "mobile application"));
+        Person p2 = new Person(2, "Reddy", "123", "abc@gmail.com", new Department(2, "Admin", "main"),
+                new Project(2, "web", "web application"));
+        Person p3 = new Person(3, "Juturu", "123", "abc@gmail.com", new Department(1, "HR", "main"),
+                new Project(3, "local", "local application"));
+
+        expectedPerson.add(p1);
+        expectedPerson.add(p2);
+        expectedPerson.add(p3);
+
+        personService.save(p1);
+        personService.save(p2);
+        personService.save(p3);
+
+        when(personMockRepo.findAll()).thenReturn(expectedPerson);
+
+        List<Person> actualPerson = new ArrayList<Person>();
+        actualPerson = personService.listAll();
+        assertEquals(expectedPerson.size(), actualPerson.size());
+    }
+
+    @Test // Person get by name "/persons/names/{name}" //mockito
+    void personName() {
+        Person expectedPerson = new Person();
+        expectedPerson.setid(1);
+        expectedPerson.setpersonname("pranay");
+        expectedPerson.setPassword("password");
+        expectedPerson.setEmail("email");
+
+        when(personMockRepo.getByName(expectedPerson.getpersonname())).thenReturn(expectedPerson);
+
+        personService.save(expectedPerson);
+        Person actualPerson = personService.getByName(expectedPerson.getpersonname());
+        assertEquals(expectedPerson.getpersonname(), actualPerson.getpersonname());
     }
 
     @Test // Unhappy get person by name "/persons/names/{name}"
-    void personnoName() {
-        Person person = new Person();
-        person.setid(1);
-        person.setpersonname("pranay");
-        person.setPassword("password");
-        person.setEmail("email");
-        person.setDepartment(new Department(1, "admin", "main"));
+    void personnoName() throws CustomException {
+        Person expectedPerson = new Person();
+        expectedPerson.setid(1);
+        expectedPerson.setpersonname("pranay");
+        expectedPerson.setPassword("password");
+        expectedPerson.setEmail("email");
 
-        Object returnedPerson = new Person();
+        when(personMockRepo.getByName(expectedPerson.getpersonname())).thenThrow(new CustomException("Not Found"));
+
+        personService.save(expectedPerson);
+
+        Person actualPerson = new Person();
         try {
-            personservice.getByName("reddy");
-
+            actualPerson = personService.getByName("reddy");
         } catch (Exception e) {
-            assertFalse(returnedPerson == null, "Person not be found");
+            assertFalse(expectedPerson.getpersonname().equals(actualPerson.getpersonname()));
         }
+    }
+
+    @Test // person updated //Mockito
+    void updatePerson() {
+        Person expectedPerson = new Person();
+        expectedPerson.setid(1);
+        expectedPerson.setpersonname("pranay");
+        expectedPerson.setPassword("password");
+        expectedPerson.setEmail("email");
+
+        personService.save(expectedPerson);
+
+        when(personMockRepo.findById(expectedPerson.getid())).thenReturn(Optional.of(expectedPerson));
+        Object actualPerson = personService.get(expectedPerson.getid());
+        assertEquals(expectedPerson.getid(), ((Person) actualPerson).getid());
+        Person updatedPerson = personService.updateperson(expectedPerson);
+        assertTrue(expectedPerson.getid().equals(updatedPerson.getid()));
     }
 
 }

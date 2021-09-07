@@ -10,9 +10,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.crudapp.main.service.PersonService;
-
-import org.springframework.beans.factory.annotation.Autowired;
 
 @Entity
 @Table(name = "person")
@@ -58,12 +55,13 @@ public class Person {
 		return "Person [email=" + email + ", id=" + id + ", password=" + password + ", personname=" + personname + "]";
 	}
 
-	public Person(Integer id, String personname, String password, String email, Department department) {
+	public Person(Integer id, String personname, String password, String email, Department department,Project project) {
 		this.id = id;
 		this.personname = personname;
 		this.password = password;
 		this.email = email;
 		this.department = department;
+		this.project = project;
 	}
 
 	public Integer getid() {

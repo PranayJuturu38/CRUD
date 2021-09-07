@@ -32,12 +32,22 @@ public class Project {
     @OneToMany(mappedBy="project",cascade=CascadeType.ALL)
     private List<Person> person = new ArrayList<Person>();
 
+
     public List<Person> getPerson() {
         return person;
     }
 
     public void setPerson(List<Person> person) {
         this.person = person;
+    }
+    public Project(){
+        
+    }
+
+    public Project(Integer id, String name, String description) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
     }
 
     public Integer getId() {
@@ -63,5 +73,7 @@ public class Project {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    
 
 }
