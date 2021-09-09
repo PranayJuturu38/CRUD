@@ -1,12 +1,16 @@
 package com.crudapp.main;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import javax.json.Json;
 
 import com.crudapp.main.exception.CustomException;
 import com.crudapp.main.model.Department;
@@ -14,6 +18,7 @@ import com.crudapp.main.model.Person;
 import com.crudapp.main.model.Project;
 import com.crudapp.main.repository.PersonRepository;
 import com.crudapp.main.service.PersonService;
+import com.google.gson.Gson;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -74,12 +79,11 @@ public class PersonTests {
         personService.save(expectedPerson);
 
         ResponseEntity<Object> actualPerson = (ResponseEntity<Object>) personService.get(1);
-        // Gson gson = new Gson();
-        // gson.toJson(actualPerson,new FileWriter("C:\\Users\\Dev\\Documents\\Kpi
-        // Stuff\\obj.json"));
-        // Gson gsonbuilder = new GsonBuilder().setPrettyPrinting().create();
-        assertEquals(actualPerson.getStatusCode(), expectedPerson);
-        // Json
+        Gson gson = new Gson();
+        String jsonString = gson.toJson(actualPerson);
+        System.out.println(jsonString);
+        String expectedPersonString = expectedPerson.getid().toString();
+        assertEquals(jsonString.length(), expectedPersonString.length());
 
     }
 
@@ -103,30 +107,79 @@ public class PersonTests {
 
     }
 
-    @Test // GetAll Persons
+    @Test //Delete Person happy //mockito //
+    void deletePerson(){
+        Person expectedPerson = new Person();
+        expectedPerson.setid(1);
+        expectedPerson.setpersonname("pranay");
+        expectedPerson.setPassword("password");
+        expectedPerson.setEmail("email");
+        
+        personService.save(expectedPerson);
+
+        doNothing().when(personMockRepo).deleteById(expectedPerson.getid());
+        boolean actualPerson = personService.delete(expectedPerson.getid());
+        assertEquals(actualPerson,true);
+    }
+
+    @Test // GetAll Persons //mockito //
     void getAllPersons() {
 
-        List<Person> expectedPerson = new ArrayList<Person>();
-        Person p1 = new Person(1, "Pranay", "123", "abc@gmail.com", new Department(1, "HR", "main"),
-                new Project(1, "mobile", "mobile application"));
-        Person p2 = new Person(2, "Reddy", "123", "abc@gmail.com", new Department(2, "Admin", "main"),
-                new Project(2, "web", "web application"));
-        Person p3 = new Person(3, "Juturu", "123", "abc@gmail.com", new Department(1, "HR", "main"),
-                new Project(3, "local", "local application"));
+       Person p1 = new Person();
+       p1.setid(1);
+       p1.setpersonname("pranay");
+       p1.setPassword("password");
+       p1.setEmail("email");
+       
+       Person p2 = new Person();
+       p2.setid(2);
+       p2.setpersonname("reddy");
+       p2.setPassword("password");
+       p2.setEmail("email");
+       
+       List<Person> expectedPersonList = new ArrayList<Person>();
 
-        expectedPerson.add(p1);
-        expectedPerson.add(p2);
-        expectedPerson.add(p3);
+        expectedPersonList.add(p1);
+        expectedPersonList.add(p2);
+        
+        when(personMockRepo.findAll()).thenReturn(expectedPersonList);
 
         personService.save(p1);
         personService.save(p2);
-        personService.save(p3);
+        List<Person> actualPersonList = personService.listAll();
+        assertEquals(expectedPersonList.size(), actualPersonList.size());
+    }
 
-        when(personMockRepo.findAll()).thenReturn(expectedPerson);
+    @Test //unhappy mockito
+    void getAllPersonsFailure(){
+        Person p1 = new Person();
+       p1.setid(1);
+       p1.setpersonname("pranay");
+       p1.setPassword("password");
+       p1.setEmail("email");
+       
+       Person p2 = new Person();
+       p2.setid(2);
+       p2.setpersonname("reddy");
+       p2.setPassword("password");
+       p2.setEmail("email");
+       
+       List<Person> expectedPersonList = new ArrayList<Person>();
 
-        List<Person> actualPerson = new ArrayList<Person>();
-        actualPerson = personService.listAll();
-        assertEquals(expectedPerson.size(), actualPerson.size());
+        expectedPersonList.add(p1);
+        expectedPersonList.add(p2);
+        
+        when(personMockRepo.findAll()).thenReturn(expectedPersonList);
+
+        personService.save(p1);
+        personService.save(p2);
+        
+        List<Person> actualPersonList = new ArrayList<Person>();
+        try{
+          actualPersonList = personService.listAll();
+        }catch(Exception e){
+           assertFalse(expectedPersonList.equals(actualPersonList));
+        }
     }
 
     @Test // Person get by name "/persons/names/{name}" //mockito
@@ -175,8 +228,8 @@ public class PersonTests {
         personService.save(expectedPerson);
 
         when(personMockRepo.findById(expectedPerson.getid())).thenReturn(Optional.of(expectedPerson));
-        Object actualPerson = personService.get(expectedPerson.getid());
-        assertEquals(expectedPerson.getid(), ((Person) actualPerson).getid());
+        Person actualPerson = (Person) personService.get(expectedPerson.getid());
+        assertEquals(expectedPerson.getid(), actualPerson.getid());
         Person updatedPerson = personService.updateperson(expectedPerson);
         assertTrue(expectedPerson.getid().equals(updatedPerson.getid()));
     }

@@ -63,7 +63,14 @@ public class Person {
 		this.department = department;
 		this.project = project;
 	}
-
+   
+	public Person(Integer id, String personname, String password, String email, Department department){
+		this.id = id;
+		this.personname = personname;
+		this.password = password;
+		this.email = email;
+		this.department = department;
+	}
 	public Integer getid() {
 		return id;
 	}

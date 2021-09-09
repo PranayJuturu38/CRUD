@@ -75,10 +75,11 @@ public class PersonServiceImpl implements PersonService {
 		}
 	}
 
-	public void delete(Integer id) throws CustomException {
+	public boolean delete(Integer id) throws CustomException {
 		Optional<Person> person = repo.findById(id);
 		if (person.isPresent()) {
 			repo.deleteById(id);
+			return true;
 		} else {
 			throw new CustomException("No person with id " + id);
 		}

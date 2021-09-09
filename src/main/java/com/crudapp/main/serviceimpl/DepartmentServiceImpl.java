@@ -62,12 +62,12 @@ public class DepartmentServiceImpl implements DepartmentService {
 	}
 
 	@Override
-	public void delete(Integer dept_id) throws CustomException {
+	public boolean delete(Integer dept_id) throws CustomException {
 		Optional<Department> dept = deptrepo.findById(dept_id);
 		if (dept.isPresent()) {
 
 			deptrepo.deleteById(dept_id);
-
+            return true;
 		} else {
 			throw new CustomException("No department found with id: " + dept_id);
 		}

@@ -62,10 +62,11 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public void delete(Integer project_id) throws CustomException {
+    public boolean delete(Integer project_id) throws CustomException {
         Optional<Project> proj = projectrepo.findById(project_id);
         if (proj.isPresent()) {
             projectrepo.deleteById(project_id);
+            return true;
         } else {
             throw new CustomException("No projects found with id:" + project_id);
         }

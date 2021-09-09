@@ -18,7 +18,7 @@ public interface DepartmentService {
 
 	Department getBydeptid(Integer dept_id);
 
-	void delete(Integer dept_id);
+	boolean delete(Integer dept_id);
 
 	Department getByName(String name);
 

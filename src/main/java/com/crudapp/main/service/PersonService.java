@@ -15,7 +15,7 @@ public interface PersonService {
 
     Object get(Integer id);
 
-    void delete(Integer id);
+    boolean delete(Integer id);
 
     Person getByName(String personname);
 

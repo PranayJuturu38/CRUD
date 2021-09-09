@@ -2,9 +2,9 @@ package com.crudapp.main;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.crudapp.main.exception.CustomException;
 import com.crudapp.main.model.Project;
 import com.crudapp.main.repository.Projectrepository;
 import com.crudapp.main.service.ProjectService;
@@ -53,7 +52,9 @@ public class ProjectTests {
 		expectedProject.setDescription("used by patients");
 
 		when(mockProjectRepository.save(expectedProject)).thenReturn(expectedProject);
-		Project actualProject = projectService.saveproject(expectedProject);
+
+		Project actualProject = new Project();
+		actualProject = projectService.saveproject(expectedProject);
 		assertFalse(expectedProject.equals(actualProject));
 	}
 
@@ -121,41 +122,58 @@ public class ProjectTests {
 		expectedProject.setDescription("used by patients");
 
 		projectService.saveproject(expectedProject);
+		
+		doNothing().when(mockProjectRepository).deleteById(expectedProject.getId());
+		boolean actualProject = projectService.delete(expectedProject.getId());
+		assertEquals(actualProject,true);
+	}
 
-		when(mockProjectRepository.findById(expectedProject.getId())).thenReturn(Optional.of(expectedProject));
-		Project actualProject = projectService.getProjectById(expectedProject.getId());
-		assertEquals(expectedProject.getId(), actualProject.getId());
-		projectService.delete(expectedProject.getId());
-		verify(mockProjectRepository).delete(expectedProject);
-		reset(mockProjectRepository);
-		when(mockProjectRepository.findById(expectedProject.getId())).thenReturn(Optional.empty());
-		assertThrows(CustomException.class, () -> projectService.getProjectById(expectedProject.getId()));
-		// verify(mockProjectRepository,times(1)).delete(expectedProject);
-		// assertThat(mockProjectRepository.findById(expectedProject.getId()).isEmpty());
+
+	@Test // Get all //mockito //
+	void getAllProjects() {
+		Project expectedProject = new Project(1, "local", "used by staff");
+		;
+		Project p1 = new Project(2, "web", "used by patients");
+		Project p2 = new Project(3, "mobile", "used by patients");
+
+		List<Project> expectedList = new ArrayList<Project>();
+		expectedList.add(expectedProject);
+		expectedList.add(p1);
+		expectedList.add(p2);
+
+		when(mockProjectRepository.findAll()).thenReturn(expectedList);
+		projectService.saveproject(expectedProject);
+		projectService.saveproject(p1);
+		projectService.saveproject(p2);
+
+		List<Project> actualList = projectService.getAllproj();
+
+		assertEquals(expectedList.size(), actualList.size());
 
 	}
 
-	@Test // Get all projects
-	void getAllProjects() {
-		Project expectedProject1 = new Project();
-		expectedProject1.setId(1);
-		expectedProject1.setName("MobileApplication");
-		expectedProject1.setDescription("patients");
+	@Test // mockito //
+	void getAllProjectsFails() throws Exception {
+		Project expectedProject = new Project(1, "local", "used by staff");
+		;
+		Project p1 = new Project(2, "web", "used by patients");
+		Project p2 = new Project(3, "mobile", "used by patients");
 
-		Project expectedProject = new Project();
-		expectedProject.setId(2);
-		expectedProject.setName("Mobile");
-		expectedProject.setDescription("used by patients");
+		List<Project> expectedList = new ArrayList<Project>();
+		expectedList.add(expectedProject);
+		expectedList.add(p1);
+		expectedList.add(p2);
 
+		when(mockProjectRepository.findAll()).thenReturn(expectedList);
 		projectService.saveproject(expectedProject);
-		projectService.saveproject(expectedProject1);
-		List<Project> projects = new ArrayList<Project>();
-		projects.add(expectedProject);
-		projects.add(expectedProject1);
-		when(mockProjectRepository.findAll()).thenReturn(projects);
+		projectService.saveproject(p1);
 
-		List<Project> actualProjects = projectService.getAllproj();
-		assertEquals(projects.size(), actualProjects.size());
+		List<Project> actualList = new ArrayList<Project>();
 
+		try {
+			actualList = projectService.getAllproj();
+		} catch (Exception e) {
+			assertFalse(expectedList.equals(actualList));
+		}
 	}
 }
