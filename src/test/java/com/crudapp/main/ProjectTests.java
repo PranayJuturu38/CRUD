@@ -113,6 +113,30 @@ public class ProjectTests {
 		assertTrue(expectedProject.getId().equals(updatedProject.getId()));
 	}
 
+	@Test // project update failed //mockito //
+	void updateProjectFails() throws Exception {
+		Project expectedProject = new Project();
+		expectedProject.setId(1);
+		expectedProject.setName("MobileApplication");
+		expectedProject.setDescription("used by patients");
+
+		Project dummyProject = new Project(2, "web", "used by patients");
+		projectService.saveproject(expectedProject);
+		projectService.saveproject(dummyProject);
+
+		when(mockProjectRepository.findById(expectedProject.getId())).thenReturn(Optional.of(expectedProject));
+		Project actualProject = projectService.getProjectById(expectedProject.getId());
+		assertEquals(expectedProject.getId(), actualProject.getId());
+		Project updatedProject = new Project();
+		try {
+			updatedProject = projectService.saveproject(dummyProject);
+
+		} catch (Exception e) {
+			assertFalse(expectedProject.getId().equals(updatedProject.getId()));
+		}
+
+	}
+
 	@Test // project delete
 	void projectDelete() {
 
@@ -122,12 +146,11 @@ public class ProjectTests {
 		expectedProject.setDescription("used by patients");
 
 		projectService.saveproject(expectedProject);
-		
+
 		doNothing().when(mockProjectRepository).deleteById(expectedProject.getId());
 		boolean actualProject = projectService.delete(expectedProject.getId());
-		assertEquals(actualProject,true);
+		assertEquals(actualProject, true);
 	}
-
 
 	@Test // Get all //mockito //
 	void getAllProjects() {

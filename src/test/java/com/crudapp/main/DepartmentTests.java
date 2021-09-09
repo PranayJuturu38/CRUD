@@ -240,10 +240,10 @@ public class DepartmentTests {
 		expectedDept.setName("admin");
 		expectedDept.setLocation("main");
 
-		Department dummyDept = new Department(2,"HR","main");
+		Department dummyDept = new Department(2, "HR", "main");
 
 		deptService.savedept(expectedDept);
-        deptService.savedept(dummyDept);
+		deptService.savedept(dummyDept);
 
 		when(mockDeptRepo.findById(expectedDept.getDept_id())).thenReturn(Optional.of(expectedDept));
 		Department actualDept = deptService.getBydeptid(expectedDept.getDept_id());
@@ -258,7 +258,7 @@ public class DepartmentTests {
 		}
 	}
 
-	@Test//Delete Department //mockito
+	@Test // Delete Department //mockito
 	void deleteDepartment() {
 		Department expectedDept = new Department();
 		expectedDept.setDept_id(1);
@@ -266,11 +266,10 @@ public class DepartmentTests {
 		expectedDept.setLocation("main");
 
 		deptService.savedept(expectedDept);
-	   doNothing().when(mockDeptRepo).deleteById(expectedDept.getDept_id());
-	   
-	   boolean actualDepartment = deptService.delete(expectedDept.getDept_id());
-	   assertEquals(actualDepartment,true);
+		doNothing().when(mockDeptRepo).deleteById(expectedDept.getDept_id());
+
+		boolean actualDepartment = deptService.delete(expectedDept.getDept_id());
+		assertEquals(actualDepartment, true);
 	}
 
-	
 }
