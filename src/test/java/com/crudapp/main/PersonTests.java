@@ -81,9 +81,10 @@ public class PersonTests {
         ResponseEntity<Object> actualPerson = (ResponseEntity<Object>) personService.get(1);
         Gson gson = new Gson();
         String jsonString = gson.toJson(actualPerson);
-        System.out.println(jsonString);
-        String expectedPersonString = expectedPerson.getid().toString();
-        assertEquals(jsonString.length(), expectedPersonString.length());
+        String index = "id";
+          int actualPersonIndex =   jsonString.indexOf(index);
+          int actualPersonId = jsonString.charAt(actualPersonIndex);
+        assertEquals(expectedPerson.getid(), actualPersonId);
 
     }
 
