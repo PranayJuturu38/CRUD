@@ -8,15 +8,15 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface ProjectService {
-    List<Project> getAllproj();
+    List<Project> getAllProj();
 
-    Project saveproject(Project project);
+    Project saveProject(Project project);
 
     Project getProjectById(Integer id);
     
     boolean delete(Integer project_id);
 
-    Project updateproject(Project project);
+    Project updateProject(Project project);
 
     Project getByName(String name);
 }

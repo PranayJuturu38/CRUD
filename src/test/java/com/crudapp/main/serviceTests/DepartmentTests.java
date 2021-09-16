@@ -1,4 +1,4 @@
-package com.crudapp.main;
+package com.crudapp.main.serviceTests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -32,20 +32,20 @@ public class DepartmentTests {
 	void DeptSaved() {
 
 		Department expectedDept = new Department();
-		expectedDept.setDept_id(1);
+		expectedDept.setDeptId(1);
 		expectedDept.setName("admin");
 		expectedDept.setLocation("main");
 
 		when(mockDeptRepo.save(expectedDept)).thenReturn(expectedDept);
-		Department actualDept = deptService.savedept(expectedDept);
-		assertEquals(expectedDept.getDept_id(), actualDept.getDept_id());
+		Department actualDept = deptService.saveDept(expectedDept);
+		assertEquals(expectedDept.getDeptId(), actualDept.getDeptId());
 	}
 
 	@Test // POST Mapping "/departments" Unhappy Test Case //mockito
 	void DeptNotSaved() throws Exception {
 
 		Department expectedDept = new Department();
-		expectedDept.setDept_id(1);
+		expectedDept.setDeptId(1);
 		expectedDept.setName("admin");
 		expectedDept.setLocation("main");
 		Department dummyDept = new Department(2, "HR", "main");
@@ -54,7 +54,7 @@ public class DepartmentTests {
 		Department actualDept = new Department();
 		try {
 
-			actualDept = deptService.savedept(dummyDept);
+			actualDept = deptService.saveDept(dummyDept);
 
 		} catch (Exception e) {
 
@@ -74,11 +74,11 @@ public class DepartmentTests {
 		expectedDeptList.add(expectedDept);
 
 		when(mockDeptRepo.findAll()).thenReturn(expectedDeptList);
-		deptService.savedept(expectedDept);
-		deptService.savedept(d1);
-		deptService.savedept(d2);
+		deptService.saveDept(expectedDept);
+		deptService.saveDept(d1);
+		deptService.saveDept(d2);
 
-		List<Department> actualDeptList = deptService.getAlldept();
+		List<Department> actualDeptList = deptService.getAllDept();
 
 		assertEquals(expectedDeptList.size(), actualDeptList.size());
 
@@ -96,12 +96,12 @@ public class DepartmentTests {
 		expectedDeptList.add(expectedDept);
 
 		when(mockDeptRepo.findAll()).thenReturn(expectedDeptList);
-		deptService.savedept(expectedDept);
-		deptService.savedept(d1);
+		deptService.saveDept(expectedDept);
+		deptService.saveDept(d1);
 		// deptService.savedept(d2);
 		List<Department> actualDeptList = new ArrayList<Department>();
 		try {
-			actualDeptList = deptService.getAlldept();
+			actualDeptList = deptService.getAllDept();
 		} catch (Exception e) {
 			assertFalse(expectedDeptList.equals(actualDeptList));
 		}
@@ -110,47 +110,47 @@ public class DepartmentTests {
 	@Test // Department get by id //mockito
 	void deptId() {
 		Department expectedDept = new Department();
-		expectedDept.setDept_id(1);
+		expectedDept.setDeptId(1);
 		expectedDept.setName("admin");
 		expectedDept.setLocation("main");
 
-		when(mockDeptRepo.findById(expectedDept.getDept_id())).thenReturn(Optional.of(expectedDept));
+		when(mockDeptRepo.findById(expectedDept.getDeptId())).thenReturn(Optional.of(expectedDept));
 
-		deptService.savedept(expectedDept);
+		deptService.saveDept(expectedDept);
 
-		Department actualDept = deptService.getBydeptid(expectedDept.getDept_id());
+		Department actualDept = deptService.getByDeptId(expectedDept.getDeptId());
 
-		assertEquals(expectedDept.getDept_id(), actualDept.getDept_id());
+		assertEquals(expectedDept.getDeptId(), actualDept.getDeptId());
 	}
 
 	@Test // Mockito
 	void deptnoid() {
 		Department expectedDept = new Department();
-		expectedDept.setDept_id(1);
+		expectedDept.setDeptId(1);
 		expectedDept.setName("admin");
 		expectedDept.setLocation("main");
 
-		when(mockDeptRepo.findById(expectedDept.getDept_id())).thenReturn(Optional.of(expectedDept));
-		deptService.savedept(expectedDept);
+		when(mockDeptRepo.findById(expectedDept.getDeptId())).thenReturn(Optional.of(expectedDept));
+		deptService.saveDept(expectedDept);
 		Department actualDepartment = new Department();
 		try {
-			actualDepartment = deptService.getBydeptid(2);
+			actualDepartment = deptService.getByDeptId(2);
 
 		} catch (Exception e) {
-			assertFalse(expectedDept.getDept_id().equals(actualDepartment.getDept_id()));
+			assertFalse(expectedDept.getDeptId().equals(actualDepartment.getDeptId()));
 		}
 	}
 
 	@Test // Department get by name //mockito
 	void deptName() {
 		Department expectedDept = new Department();
-		expectedDept.setDept_id(1);
+		expectedDept.setDeptId(1);
 		expectedDept.setName("admin");
 		expectedDept.setLocation("main");
 
 		when(mockDeptRepo.getByName(expectedDept.getName())).thenReturn(expectedDept);
 
-		deptService.savedept(expectedDept);
+		deptService.saveDept(expectedDept);
 		Department actualDept = deptService.getByName(expectedDept.getName());
 		assertEquals(expectedDept.getName(), actualDept.getName());
 	}
@@ -158,12 +158,12 @@ public class DepartmentTests {
 	@Test // mockito
 	void deptnoname() {
 		Department expectedDept = new Department();
-		expectedDept.setDept_id(1);
+		expectedDept.setDeptId(1);
 		expectedDept.setName("admin");
 		expectedDept.setLocation("main");
 
 		when(mockDeptRepo.getByName(expectedDept.getName())).thenReturn(expectedDept);
-		deptService.savedept(expectedDept);
+		deptService.saveDept(expectedDept);
 		Department actualDept = new Department();
 		try {
 
@@ -181,13 +181,13 @@ public class DepartmentTests {
 
 		Department expectedDept = new Department();
 
-		expectedDept.setDept_id(1);
+		expectedDept.setDeptId(1);
 		expectedDept.setName("admin");
 		expectedDept.setLocation("main");
 		List<Department> deptList = new ArrayList<Department>();
 		deptList.add(expectedDept);
 		when(mockDeptRepo.getByLocation(expectedDept.getLocation())).thenReturn(deptList);
-		deptService.savedept(expectedDept);
+		deptService.saveDept(expectedDept);
 
 		List<Department> actualDept = deptService.getByLocation(expectedDept.getLocation());
 
@@ -197,13 +197,13 @@ public class DepartmentTests {
 	@Test // mockito
 	void deptNoLocation() {
 		Department expectedDept = new Department();
-		expectedDept.setDept_id(1);
+		expectedDept.setDeptId(1);
 		expectedDept.setName("admin");
 		expectedDept.setLocation("main");
 		List<Department> expectedList = new ArrayList<Department>();
 		expectedList.add(expectedDept);
 		when(mockDeptRepo.getByLocation(expectedDept.getLocation())).thenReturn(expectedList);
-		deptService.savedept(expectedDept);
+		deptService.saveDept(expectedDept);
 
 		List<Department> actualList = new ArrayList<Department>();
 
@@ -220,55 +220,55 @@ public class DepartmentTests {
 	@Test // update department details //mockito
 	void updateDepartment() {
 		Department expectedDept = new Department();
-		expectedDept.setDept_id(1);
+		expectedDept.setDeptId(1);
 		expectedDept.setName("admin");
 		expectedDept.setLocation("main");
 
-		deptService.savedept(expectedDept);
-		when(mockDeptRepo.findById(expectedDept.getDept_id())).thenReturn(Optional.of(expectedDept));
-		Department actualDept = deptService.getBydeptid(expectedDept.getDept_id());
-		assertEquals(expectedDept.getDept_id(), actualDept.getDept_id());
-		Department updatedDept = deptService.updatedept(expectedDept);
-		assertTrue(expectedDept.getDept_id().equals(updatedDept.getDept_id()));
+		deptService.saveDept(expectedDept);
+		when(mockDeptRepo.findById(expectedDept.getDeptId())).thenReturn(Optional.of(expectedDept));
+		Department actualDept = deptService.getByDeptId(expectedDept.getDeptId());
+		assertEquals(expectedDept.getDeptId(), actualDept.getDeptId());
+		Department updatedDept = deptService.updateDept(expectedDept);
+		assertTrue(expectedDept.getDeptId().equals(updatedDept.getDeptId()));
 
 	}
 
 	@Test
 	void updateFailedDept() {
 		Department expectedDept = new Department();
-		expectedDept.setDept_id(1);
+		expectedDept.setDeptId(1);
 		expectedDept.setName("admin");
 		expectedDept.setLocation("main");
 
 		Department dummyDept = new Department(2, "HR", "main");
 
-		deptService.savedept(expectedDept);
-		deptService.savedept(dummyDept);
+		deptService.saveDept(expectedDept);
+		deptService.saveDept(dummyDept);
 
-		when(mockDeptRepo.findById(expectedDept.getDept_id())).thenReturn(Optional.of(expectedDept));
-		Department actualDept = deptService.getBydeptid(expectedDept.getDept_id());
-		assertEquals(expectedDept.getDept_id(), actualDept.getDept_id());
+		when(mockDeptRepo.findById(expectedDept.getDeptId())).thenReturn(Optional.of(expectedDept));
+		Department actualDept = deptService.getByDeptId(expectedDept.getDeptId());
+		assertEquals(expectedDept.getDeptId(), actualDept.getDeptId());
 
 		Department updatedDept = new Department();
 		try {
-			updatedDept = deptService.updatedept(dummyDept);
+			updatedDept = deptService.updateDept(dummyDept);
 
 		} catch (Exception e) {
-			assertFalse(expectedDept.getDept_id().equals(updatedDept.getDept_id()));
+			assertFalse(expectedDept.getDeptId().equals(updatedDept.getDeptId()));
 		}
 	}
 
 	@Test // Delete Department //mockito
 	void deleteDepartment() {
 		Department expectedDept = new Department();
-		expectedDept.setDept_id(1);
+		expectedDept.setDeptId(1);
 		expectedDept.setName("admin");
 		expectedDept.setLocation("main");
 
-		deptService.savedept(expectedDept);
-		doNothing().when(mockDeptRepo).deleteById(expectedDept.getDept_id());
+		deptService.saveDept(expectedDept);
+		doNothing().when(mockDeptRepo).deleteById(expectedDept.getDeptId());
 
-		boolean actualDepartment = deptService.delete(expectedDept.getDept_id());
+		boolean actualDepartment = deptService.delete(expectedDept.getDeptId());
 		assertEquals(actualDepartment, true);
 	}
 

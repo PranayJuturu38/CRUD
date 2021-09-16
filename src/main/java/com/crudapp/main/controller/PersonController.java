@@ -35,10 +35,10 @@ public class PersonController {
 	@GetMapping("/persons/{id}")
 	public ResponseEntity<Object> get(@PathVariable Integer id) throws CustomException {
        try{
-		return new ResponseEntity<Object>(service.get(id),HttpStatus.OK);
+		return new ResponseEntity<Object>(service.getPersonById(id),HttpStatus.OK);
 
 	}catch (Exception e) {
-		return new ResponseEntity<Object>(service.get(id),HttpStatus.NOT_FOUND);
+		return new ResponseEntity<Object>(service.getPersonById(id),HttpStatus.NOT_FOUND);
 	}
 }
 
@@ -57,8 +57,8 @@ public class PersonController {
         String message = "";
 		try {
 
-			service.save(person);
-			message = "Person added successfully with id: " + person.getid();
+			service.savePerson(person);
+			message = "Person added successfully with id: " + person.getId();
 			return ResponseEntity.status(HttpStatus.OK).body(new Message(message));
 
 		} catch (Exception e) {
@@ -79,7 +79,7 @@ public class PersonController {
 	public ResponseEntity<Message> update(@Validated @RequestBody Person person, @PathVariable Integer id) throws Exception {
 		String message = "";
 		try {
-			service.updateperson(person);
+			service.updatePerson(person);
 			message="Updated person:"+id+"successfully";
 			return ResponseEntity.status(HttpStatus.OK).body(new Message(message));
 		} catch (Exception e) {

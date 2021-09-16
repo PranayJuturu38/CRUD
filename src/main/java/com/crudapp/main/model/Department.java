@@ -20,8 +20,8 @@ public class Department {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "dept_id")
-	private Integer dept_id;
+	@Column(name = "deptId")
+	private Integer deptId;
 	@Column(name = "name")
 	private String name;
 	@Column(name = "location")
@@ -35,12 +35,12 @@ public class Department {
 
 	}
 
-	public Integer getDept_id() {
-		return dept_id;
+	public Integer getDeptId() {
+		return deptId;
 	}
 
-	public void setDept_id(Integer dept_id) {
-		this.dept_id = dept_id;
+	public void setDeptId(Integer deptId) {
+		this.deptId = deptId;
 	}
 
 	public String getName() {
@@ -59,8 +59,8 @@ public class Department {
 		this.location = location;
 	}
 
-	public Department(Integer dept_id, String name, String location) {
-		this.dept_id = dept_id;
+	public Department(Integer deptId, String name, String location) {
+		this.deptId = deptId;
 		this.name = name;
 		this.location = location;
 	}

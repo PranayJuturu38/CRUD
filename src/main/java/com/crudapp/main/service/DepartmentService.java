@@ -10,15 +10,15 @@ import com.crudapp.main.model.Department;
 @Service
 public interface DepartmentService {
 
-	List<Department> getAlldept();
+	List<Department> getAllDept();
 
-	Department savedept(Department dept);
+	Department saveDept(Department dept);
 
-	Department updatedept(Department dept);
+	Department updateDept(Department dept);
 
-	Department getBydeptid(Integer dept_id);
+	Department getByDeptId(Integer deptId);
 
-	boolean delete(Integer dept_id);
+	boolean delete(Integer deptId);
 
 	Department getByName(String name);
 

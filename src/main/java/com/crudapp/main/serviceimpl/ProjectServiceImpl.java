@@ -22,7 +22,7 @@ public class ProjectServiceImpl implements ProjectService {
     private Projectrepository projectrepo;
 
     @Override
-    public List<Project> getAllproj() {
+    public List<Project> getAllProj() {
         List<Project> proj = projectrepo.findAll();
         if (proj.size() > 0) {
             return proj;
@@ -32,7 +32,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public Project saveproject(Project project) {
+    public Project saveProject(Project project) {
         Optional<Project> proj = projectrepo.findById(project.getId());
         if (!proj.isPresent()) {
             Project newproj = new Project();
@@ -73,7 +73,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public Project updateproject(Project project) throws CustomException {
+    public Project updateProject(Project project) throws CustomException {
         Optional<Project> existingproj = projectrepo.findById(project.getId());
         if (existingproj.isPresent()) {
             Project updatedproj = existingproj.get();

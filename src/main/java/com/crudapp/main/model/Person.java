@@ -71,7 +71,16 @@ public class Person {
 		this.email = email;
 		this.department = department;
 	}
-	public Integer getid() {
+
+	public Person(Integer id, String personname, String password, String email){
+		this.id = id;
+		this.personname = personname;
+		this.password = password;
+		this.email = email;
+	}
+
+	
+	public Integer getId() {
 		return id;
 	}
 
@@ -79,11 +88,11 @@ public class Person {
 		this.id = id;
 	}
 
-	public String getpersonname() {
+	public String getPersonName() {
 		return personname;
 	}
 
-	public void setpersonname(String personname) {
+	public void setPersonName(String personname) {
 		this.personname = personname;
 	}
 

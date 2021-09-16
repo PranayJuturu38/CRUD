@@ -38,15 +38,15 @@ public class PersonServiceImpl implements PersonService {
 	}
 
 	@Override
-	public Person save(Person person) {
+	public Person savePerson(Person person) {
 
-		Optional<Person> exisitngPerson = repo.findById(person.getid());
+		Optional<Person> exisitngPerson = repo.findById(person.getId());
 
 		if (!exisitngPerson.isPresent()) {
 			Person newPerson = new Person();
 
-			newPerson.setid(person.getid());
-			newPerson.setpersonname(person.getpersonname());
+			newPerson.setid(person.getId());
+			newPerson.setPersonName(person.getPersonName());
 			newPerson.setPassword(person.getPassword());
 			newPerson.setEmail(person.getEmail());
 			newPerson.setDepartment(person.getDepartment());
@@ -61,7 +61,7 @@ public class PersonServiceImpl implements PersonService {
 	}
 
 	@Override
-	public ResponseEntity<Object> get(Integer id) throws CustomException {
+	public ResponseEntity<Object> getPersonById(Integer id) throws CustomException {
 
 		Optional<Person> person = repo.findById(id);
 
@@ -98,11 +98,11 @@ public class PersonServiceImpl implements PersonService {
 	}
 
 	@Override
-	public Person updateperson(Person person) {
-		Optional<Person> existingperson = repo.findById(person.getid());
+	public Person updatePerson(Person person) {
+		Optional<Person> existingperson = repo.findById(person.getId());
 		if (existingperson.isPresent()) {
 			Person updatedperson = existingperson.get();
-			updatedperson.setpersonname(person.getpersonname());
+			updatedperson.setPersonName(person.getPersonName());
 			updatedperson.setPassword(person.getPassword());
 			updatedperson.setEmail(person.getEmail());
 			updatedperson.setDepartment(person.getDepartment());

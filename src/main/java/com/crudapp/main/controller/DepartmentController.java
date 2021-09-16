@@ -25,21 +25,21 @@ public class DepartmentController {
 	private DepartmentService deptservice;
 
 	@GetMapping("/departments")
-	public List<Department> list() {
+	public List<Department> listAll() {
 
-		return deptservice.getAlldept();
+		return deptservice.getAllDept();
 	}
 
-	@GetMapping("/departments/{dept_id}")
-	public ResponseEntity<Department> get(@PathVariable Integer dept_id) throws CustomException {
+	@GetMapping("/departments/{deptId}")
+	public ResponseEntity<Department> getById(@PathVariable Integer deptId) throws CustomException {
     
-		Department dept = deptservice.getBydeptid(dept_id);
+		Department dept = deptservice.getByDeptId(deptId);
 		return new ResponseEntity<Department>(dept, HttpStatus.OK);
 
 	}
 
 	@GetMapping("/departments/name/{name}")
-	public ResponseEntity<Object> getfromname(@PathVariable("name") String name) throws CustomException {
+	public ResponseEntity<Object> getFromName(@PathVariable("name") String name) throws CustomException {
 		try {
 			Department dept = deptservice.getByName(name);
 			return new ResponseEntity<>(dept, HttpStatus.OK);
@@ -63,8 +63,8 @@ public class DepartmentController {
 	public ResponseEntity<Message> add(@RequestBody Department dept) throws Exception {
 		String message = "";
 		try {
-			deptservice.savedept(dept);
-			message = "Department added with id: " + dept.getDept_id();
+			deptservice.saveDept(dept);
+			message = "Department added with id: " + dept.getDeptId();
 			return ResponseEntity.status(HttpStatus.OK).body(new Message(message));
 
 		} catch (Exception e)
@@ -77,13 +77,13 @@ public class DepartmentController {
 
 	}
 
-	@PutMapping("/departments/{dept_id}")
-	public ResponseEntity<Message> update(@RequestBody Department dept, @PathVariable Integer dept_id)
+	@PutMapping("/departments/{deptId}")
+	public ResponseEntity<Message> update(@RequestBody Department dept, @PathVariable Integer deptId)
 			throws Exception {
 		String message = "";
 		try {
-			deptservice.updatedept(dept);
-			message = "Updated Department-" + dept_id + "Successfully";
+			deptservice.updateDept(dept);
+			message = "Updated Department-" + deptId + "Successfully";
 			return ResponseEntity.status(HttpStatus.OK).body(new Message(message));
 		} catch (Exception e) {
 
@@ -93,13 +93,13 @@ public class DepartmentController {
 		}
 	}
 
-	@DeleteMapping("/departments/{dept_id}")
-	public ResponseEntity<Message> delete(@PathVariable Integer dept_id) throws CustomException {
+	@DeleteMapping("/departments/{deptId}")
+	public ResponseEntity<Message> delete(@PathVariable Integer deptId) throws CustomException {
 		String message = "";
 		try {
 
-			deptservice.delete(dept_id);
-			message = "Deleted Department-" + dept_id + "Successfully";
+			deptservice.delete(deptId);
+			message = "Deleted Department-" + deptId + "Successfully";
 			return ResponseEntity.status(HttpStatus.OK).body(new Message(message));
 		} catch (Exception e) {
 			message = "Couldn't delete the department"+e.getMessage();

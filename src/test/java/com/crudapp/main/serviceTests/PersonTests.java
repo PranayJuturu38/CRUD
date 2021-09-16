@@ -1,4 +1,4 @@
-package com.crudapp.main;
+package com.crudapp.main.serviceTests;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.doNothing;
@@ -24,6 +24,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 @SpringBootTest
@@ -39,15 +40,15 @@ public class PersonTests {
         Person expectedPerson = new Person();
 
         expectedPerson.setid(1);
-        expectedPerson.setpersonname("pranay");
+        expectedPerson.setPersonName("pranay");
         expectedPerson.setPassword("password");
         expectedPerson.setEmail("email");
 
         when(personMockRepo.save(expectedPerson)).thenReturn(expectedPerson);
 
-        Person actualPerson = personService.save(expectedPerson);
+        Person actualPerson = personService.savePerson(expectedPerson);
 
-        assertEquals(expectedPerson.getid(), actualPerson.getid());
+        assertEquals(expectedPerson.getId(), actualPerson.getId());
 
     }
 
@@ -55,13 +56,13 @@ public class PersonTests {
     void personNotSaved() throws Exception {
         Person expectedPerson = new Person();
         expectedPerson.setid(1);
-        expectedPerson.setpersonname("pranay");
+        expectedPerson.setPersonName("pranay");
         expectedPerson.setPassword("password");
         expectedPerson.setEmail("email");
 
         when(personMockRepo.save(expectedPerson)).thenReturn(expectedPerson);
 
-        Person actualPerson = personService.save(expectedPerson);
+        Person actualPerson = personService.savePerson(expectedPerson);
         assertFalse(expectedPerson.equals(actualPerson));
     }
 
@@ -70,21 +71,22 @@ public class PersonTests {
 
         Person expectedPerson = new Person();
         expectedPerson.setid(1);
-        expectedPerson.setpersonname("pranay");
+        expectedPerson.setPersonName("pranay");
         expectedPerson.setPassword("password");
         expectedPerson.setEmail("email");
 
-        when(personMockRepo.findById(expectedPerson.getid())).thenReturn(Optional.of(expectedPerson));
+        when(personMockRepo.findById(expectedPerson.getId())).thenReturn(Optional.of(expectedPerson));
 
-        personService.save(expectedPerson);
+        personService.savePerson(expectedPerson);
 
-        ResponseEntity<Object> actualPerson = (ResponseEntity<Object>) personService.get(1);
+        ResponseEntity<Object> actualPerson = (ResponseEntity<Object>) personService.getPersonById(1);
+        ResponseEntity<Object> actualPerson1= new ResponseEntity<Object>(personService.getPersonById(1),HttpStatus.OK);
         Gson gson = new Gson();
-        String jsonString = gson.toJson(actualPerson);
+        String jsonString = gson.toJson(actualPerson1);
         String index = "id";
           int actualPersonIndex =   jsonString.indexOf(index);
           int actualPersonId = jsonString.charAt(actualPersonIndex);
-        assertEquals(expectedPerson.getid(), actualPersonId);
+        assertEquals(expectedPerson.getId(), actualPersonId);
 
     }
 
@@ -112,14 +114,14 @@ public class PersonTests {
     void deletePerson(){
         Person expectedPerson = new Person();
         expectedPerson.setid(1);
-        expectedPerson.setpersonname("pranay");
+        expectedPerson.setPersonName("pranay");
         expectedPerson.setPassword("password");
         expectedPerson.setEmail("email");
         
-        personService.save(expectedPerson);
+        personService.savePerson(expectedPerson);
 
-        doNothing().when(personMockRepo).deleteById(expectedPerson.getid());
-        boolean actualPerson = personService.delete(expectedPerson.getid());
+        doNothing().when(personMockRepo).deleteById(expectedPerson.getId());
+        boolean actualPerson = personService.delete(expectedPerson.getId());
         assertEquals(actualPerson,true);
     }
 
@@ -128,13 +130,13 @@ public class PersonTests {
 
        Person p1 = new Person();
        p1.setid(1);
-       p1.setpersonname("pranay");
+       p1.setPersonName("pranay");
        p1.setPassword("password");
        p1.setEmail("email");
        
        Person p2 = new Person();
        p2.setid(2);
-       p2.setpersonname("reddy");
+       p2.setPersonName("reddy");
        p2.setPassword("password");
        p2.setEmail("email");
        
@@ -145,8 +147,8 @@ public class PersonTests {
         
         when(personMockRepo.findAll()).thenReturn(expectedPersonList);
 
-        personService.save(p1);
-        personService.save(p2);
+        personService.savePerson(p1);
+        personService.savePerson(p2);
         List<Person> actualPersonList = personService.listAll();
         assertEquals(expectedPersonList.size(), actualPersonList.size());
     }
@@ -155,13 +157,13 @@ public class PersonTests {
     void getAllPersonsFailure(){
         Person p1 = new Person();
        p1.setid(1);
-       p1.setpersonname("pranay");
+       p1.setPersonName("pranay");
        p1.setPassword("password");
        p1.setEmail("email");
        
        Person p2 = new Person();
        p2.setid(2);
-       p2.setpersonname("reddy");
+       p2.setPersonName("reddy");
        p2.setPassword("password");
        p2.setEmail("email");
        
@@ -172,8 +174,8 @@ public class PersonTests {
         
         when(personMockRepo.findAll()).thenReturn(expectedPersonList);
 
-        personService.save(p1);
-        personService.save(p2);
+        personService.savePerson(p1);
+        personService.savePerson(p2);
         
         List<Person> actualPersonList = new ArrayList<Person>();
         try{
@@ -187,34 +189,34 @@ public class PersonTests {
     void personName() {
         Person expectedPerson = new Person();
         expectedPerson.setid(1);
-        expectedPerson.setpersonname("pranay");
+        expectedPerson.setPersonName("pranay");
         expectedPerson.setPassword("password");
         expectedPerson.setEmail("email");
 
-        when(personMockRepo.getByName(expectedPerson.getpersonname())).thenReturn(expectedPerson);
+        when(personMockRepo.getByName(expectedPerson.getPersonName())).thenReturn(expectedPerson);
 
-        personService.save(expectedPerson);
-        Person actualPerson = personService.getByName(expectedPerson.getpersonname());
-        assertEquals(expectedPerson.getpersonname(), actualPerson.getpersonname());
+        personService.savePerson(expectedPerson);
+        Person actualPerson = personService.getByName(expectedPerson.getPersonName());
+        assertEquals(expectedPerson.getPersonName(), actualPerson.getPersonName());
     }
 
     @Test // Unhappy get person by name "/persons/names/{name}"
     void personnoName() throws CustomException {
         Person expectedPerson = new Person();
         expectedPerson.setid(1);
-        expectedPerson.setpersonname("pranay");
+        expectedPerson.setPersonName("pranay");
         expectedPerson.setPassword("password");
         expectedPerson.setEmail("email");
 
-        when(personMockRepo.getByName(expectedPerson.getpersonname())).thenThrow(new CustomException("Not Found"));
+        when(personMockRepo.getByName(expectedPerson.getPersonName())).thenThrow(new CustomException("Not Found"));
 
-        personService.save(expectedPerson);
+        personService.savePerson(expectedPerson);
 
         Person actualPerson = new Person();
         try {
             actualPerson = personService.getByName("reddy");
         } catch (Exception e) {
-            assertFalse(expectedPerson.getpersonname().equals(actualPerson.getpersonname()));
+            assertFalse(expectedPerson.getPersonName().equals(actualPerson.getPersonName()));
         }
     }
 
@@ -222,17 +224,17 @@ public class PersonTests {
     void updatePerson() {
         Person expectedPerson = new Person();
         expectedPerson.setid(1);
-        expectedPerson.setpersonname("pranay");
+        expectedPerson.setPersonName("pranay");
         expectedPerson.setPassword("password");
         expectedPerson.setEmail("email");
 
-        personService.save(expectedPerson);
+        personService.savePerson(expectedPerson);
 
-        when(personMockRepo.findById(expectedPerson.getid())).thenReturn(Optional.of(expectedPerson));
-        Person actualPerson = (Person) personService.get(expectedPerson.getid());
-        assertEquals(expectedPerson.getid(), actualPerson.getid());
-        Person updatedPerson = personService.updateperson(expectedPerson);
-        assertTrue(expectedPerson.getid().equals(updatedPerson.getid()));
+        when(personMockRepo.findById(expectedPerson.getId())).thenReturn(Optional.of(expectedPerson));
+        Person actualPerson = (Person) personService.getPersonById(expectedPerson.getId());
+        assertEquals(expectedPerson.getId(), actualPerson.getId());
+        Person updatedPerson = personService.updatePerson(expectedPerson);
+        assertTrue(expectedPerson.getId().equals(updatedPerson.getId()));
     }
 
 }

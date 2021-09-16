@@ -22,7 +22,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 	private Departmentrepository deptrepo;// using autowired to use the repository in this class
 
 	@Override //Shows all the departments in the db
-	public List<Department> getAlldept() {
+	public List<Department> getAllDept() {
 		List<Department> dept = deptrepo.findAll();
 		if (dept.size() > 0) {
 			return dept;
@@ -32,13 +32,13 @@ public class DepartmentServiceImpl implements DepartmentService {
 	}
 
 	@Override
-	public Department savedept(Department dept) throws CustomException {
+	public Department saveDept(Department dept) throws CustomException {
 
-		Optional<Department> newDept = deptrepo.findById(dept.getDept_id());
+		Optional<Department> newDept = deptrepo.findById(dept.getDeptId());
 		Department deptname = deptrepo.getByName(dept.getName());
 		if (!newDept.isPresent() && deptname == null) {
 			Department newDepartment = new Department();
-			newDepartment.setDept_id(dept.getDept_id());
+			newDepartment.setDeptId(dept.getDeptId());
 			newDepartment.setName(dept.getName());
 			newDepartment.setLocation(dept.getLocation());
 			newDepartment.setPersons(dept.getPersons());
@@ -51,25 +51,25 @@ public class DepartmentServiceImpl implements DepartmentService {
 	}
 
 	@Override
-	public Department getBydeptid(Integer dept_id) throws CustomException {
-		Optional<Department> dept = deptrepo.findById(dept_id);
+	public Department getByDeptId(Integer deptId) throws CustomException {
+		Optional<Department> dept = deptrepo.findById(deptId);
 		if (dept.isPresent()) {
 			return dept.get();
 		} else {
-			throw new CustomException("No department found with id " + dept_id);
+			throw new CustomException("No department found with id " + deptId);
 		}
 
 	}
 
 	@Override
-	public boolean delete(Integer dept_id) throws CustomException {
-		Optional<Department> dept = deptrepo.findById(dept_id);
+	public boolean delete(Integer deptId) throws CustomException {
+		Optional<Department> dept = deptrepo.findById(deptId);
 		if (dept.isPresent()) {
 
-			deptrepo.deleteById(dept_id);
+			deptrepo.deleteById(deptId);
             return true;
 		} else {
-			throw new CustomException("No department found with id: " + dept_id);
+			throw new CustomException("No department found with id: " + deptId);
 		}
 	}
 
@@ -97,8 +97,8 @@ public class DepartmentServiceImpl implements DepartmentService {
 	}
 
 	@Override
-	public Department updatedept(Department dept) throws CustomException {
-		Optional<Department> existingdept = deptrepo.findById(dept.getDept_id());
+	public Department updateDept(Department dept) throws CustomException {
+		Optional<Department> existingdept = deptrepo.findById(dept.getDeptId());
 		if (existingdept.isPresent()) {
 			Department updateddept = existingdept.get();
 			updateddept.setName(dept.getName());

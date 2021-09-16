@@ -1,11 +1,9 @@
-package com.crudapp.main;
+package com.crudapp.main.serviceTests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -40,7 +38,7 @@ public class ProjectTests {
 		// projectService.saveproject(expectedproject);
 
 		when(mockProjectRepository.save(expectedProject)).thenReturn(expectedProject);
-		Project actualProject = projectService.saveproject(expectedProject);
+		Project actualProject = projectService.saveProject(expectedProject);
 		assertEquals(expectedProject.getId(), actualProject.getId());
 	}
 
@@ -54,7 +52,7 @@ public class ProjectTests {
 		when(mockProjectRepository.save(expectedProject)).thenReturn(expectedProject);
 
 		Project actualProject = new Project();
-		actualProject = projectService.saveproject(expectedProject);
+		actualProject = projectService.saveProject(expectedProject);
 		assertFalse(expectedProject.equals(actualProject));
 	}
 
@@ -69,7 +67,7 @@ public class ProjectTests {
 		// Checking the project in the repo
 		when(mockProjectRepository.findById(expectedProject.getId())).thenReturn(Optional.of(expectedProject));
 
-		projectService.saveproject(expectedProject);// saving in the db
+		projectService.saveProject(expectedProject);// saving in the db
 
 		Project actualProject = projectService.getProjectById(expectedProject.getId());
 
@@ -86,7 +84,7 @@ public class ProjectTests {
 		expectedProject.setDescription("used by patients");
 
 		when(mockProjectRepository.findById(expectedProject.getId())).thenReturn(Optional.empty());
-		projectService.saveproject(expectedProject);
+		projectService.saveProject(expectedProject);
 		Project actualProject = new Project();
 		try {
 			actualProject = projectService.getProjectById(2);
@@ -104,12 +102,12 @@ public class ProjectTests {
 		expectedProject.setName("MobileApplication");
 		expectedProject.setDescription("used by patients");
 
-		projectService.saveproject(expectedProject);
+		projectService.saveProject(expectedProject);
 
 		when(mockProjectRepository.findById(expectedProject.getId())).thenReturn(Optional.of(expectedProject));
 		Project actualProject = projectService.getProjectById(expectedProject.getId());
 		assertEquals(expectedProject.getId(), actualProject.getId());
-		Project updatedProject = projectService.updateproject(expectedProject);
+		Project updatedProject = projectService.updateProject(expectedProject);
 		assertTrue(expectedProject.getId().equals(updatedProject.getId()));
 	}
 
@@ -121,15 +119,15 @@ public class ProjectTests {
 		expectedProject.setDescription("used by patients");
 
 		Project dummyProject = new Project(2, "web", "used by patients");
-		projectService.saveproject(expectedProject);
-		projectService.saveproject(dummyProject);
+		projectService.saveProject(expectedProject);
+		projectService.saveProject(dummyProject);
 
 		when(mockProjectRepository.findById(expectedProject.getId())).thenReturn(Optional.of(expectedProject));
 		Project actualProject = projectService.getProjectById(expectedProject.getId());
 		assertEquals(expectedProject.getId(), actualProject.getId());
 		Project updatedProject = new Project();
 		try {
-			updatedProject = projectService.saveproject(dummyProject);
+			updatedProject = projectService.saveProject(dummyProject);
 
 		} catch (Exception e) {
 			assertFalse(expectedProject.getId().equals(updatedProject.getId()));
@@ -145,7 +143,7 @@ public class ProjectTests {
 		expectedProject.setName("MobileApplication");
 		expectedProject.setDescription("used by patients");
 
-		projectService.saveproject(expectedProject);
+		projectService.saveProject(expectedProject);
 
 		doNothing().when(mockProjectRepository).deleteById(expectedProject.getId());
 		boolean actualProject = projectService.delete(expectedProject.getId());
@@ -165,11 +163,11 @@ public class ProjectTests {
 		expectedList.add(p2);
 
 		when(mockProjectRepository.findAll()).thenReturn(expectedList);
-		projectService.saveproject(expectedProject);
-		projectService.saveproject(p1);
-		projectService.saveproject(p2);
+		projectService.saveProject(expectedProject);
+		projectService.saveProject(p1);
+		projectService.saveProject(p2);
 
-		List<Project> actualList = projectService.getAllproj();
+		List<Project> actualList = projectService.getAllProj();
 
 		assertEquals(expectedList.size(), actualList.size());
 
@@ -188,13 +186,13 @@ public class ProjectTests {
 		expectedList.add(p2);
 
 		when(mockProjectRepository.findAll()).thenReturn(expectedList);
-		projectService.saveproject(expectedProject);
-		projectService.saveproject(p1);
+		projectService.saveProject(expectedProject);
+		projectService.saveProject(p1);
 
 		List<Project> actualList = new ArrayList<Project>();
 
 		try {
-			actualList = projectService.getAllproj();
+			actualList = projectService.getAllProj();
 		} catch (Exception e) {
 			assertFalse(expectedList.equals(actualList));
 		}

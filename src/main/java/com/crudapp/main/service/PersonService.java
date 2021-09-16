@@ -11,13 +11,13 @@ public interface PersonService {
 
     List<Person> listAll();
 
-    Person save(Person person);
+    Person savePerson(Person person);
 
-    Object get(Integer id);
+    Object getPersonById(Integer id);
 
     boolean delete(Integer id);
 
     Person getByName(String personname);
 
-    Person updateperson(Person person);
+    Person updatePerson(Person person);
 }

@@ -26,9 +26,9 @@ public class ProjectController {
     private ProjectService projservice;
 
     @GetMapping
-    public List<Project> allprojects() {
+    public List<Project> allProjects() {
 
-        return projservice.getAllproj();
+        return projservice.getAllProj();
 
     }
 
@@ -36,7 +36,7 @@ public class ProjectController {
     public ResponseEntity<Message> createproject(@RequestBody Project project) throws Exception {
         String message = "";
         try {
-            projservice.saveproject(project);
+            projservice.saveProject(project);
             message = "Project saved successfully with id: " + project.getId();
             return ResponseEntity.status(HttpStatus.OK).body(new Message(message));
         } catch (Exception e) {
@@ -56,14 +56,14 @@ public class ProjectController {
         }
     }
 
-    @GetMapping("/names/{name}")
+    @GetMapping("/name/{name}")
     public ResponseEntity<Project> getfromname(@PathVariable("name") String name) throws Exception {
         try {
             Project proj = projservice.getByName(name);
-            return new ResponseEntity<Project>(proj, HttpStatus.OK);
+            return new ResponseEntity<>(proj, HttpStatus.OK);
 
         } catch (Exception e) {
-            return new ResponseEntity<Project>(HttpStatus.NOT_FOUND);
+          throw e;
         }
     }
 }
