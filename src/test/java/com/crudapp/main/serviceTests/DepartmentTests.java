@@ -32,8 +32,8 @@ public class DepartmentTests {
 	void DeptSaved() {
 
 		Department expectedDept = new Department();
-		expectedDept.setDeptId(1);
-		expectedDept.setName("admin");
+		expectedDept.setDeptId(3);
+		expectedDept.setName("production");
 		expectedDept.setLocation("main");
 
 		when(mockDeptRepo.save(expectedDept)).thenReturn(expectedDept);
@@ -74,10 +74,7 @@ public class DepartmentTests {
 		expectedDeptList.add(expectedDept);
 
 		when(mockDeptRepo.findAll()).thenReturn(expectedDeptList);
-		deptService.saveDept(expectedDept);
-		deptService.saveDept(d1);
-		deptService.saveDept(d2);
-
+		
 		List<Department> actualDeptList = deptService.getAllDept();
 
 		assertEquals(expectedDeptList.size(), actualDeptList.size());
@@ -187,7 +184,7 @@ public class DepartmentTests {
 		List<Department> deptList = new ArrayList<Department>();
 		deptList.add(expectedDept);
 		when(mockDeptRepo.getByLocation(expectedDept.getLocation())).thenReturn(deptList);
-		deptService.saveDept(expectedDept);
+		//deptService.saveDept(expectedDept);
 
 		List<Department> actualDept = deptService.getByLocation(expectedDept.getLocation());
 

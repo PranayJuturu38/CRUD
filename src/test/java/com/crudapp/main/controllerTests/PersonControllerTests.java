@@ -2,28 +2,30 @@ package com.crudapp.main.controllerTests;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import com.crudapp.main.controller.PersonController;
 import com.crudapp.main.model.Person;
-import com.crudapp.main.service.PersonService;
+import com.crudapp.main.repository.PersonRepository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import static org.hamcrest.CoreMatchers.is;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 @WebMvcTest(controllers = PersonController.class)
+@AutoConfigureRestDocs(outputDir = "target/generated-snippets")
+@AutoConfigureMockMvc
 public class PersonControllerTests {
     @Autowired
     private MockMvc mockMvc;
@@ -32,7 +34,7 @@ public class PersonControllerTests {
     private ObjectMapper objectMapper;
     
     @MockBean
-    private PersonService personService;
+    private PersonRepository personRepository;
 
     List<Person> personList = new ArrayList<Person>();
 
@@ -46,36 +48,47 @@ public class PersonControllerTests {
 
     @Test
     void getAllPersons() throws Exception {
-        given(personService.listAll()).willReturn(new ArrayList<Person>());
+        given(personRepository.findAll()).willReturn(new ArrayList<Person>());
         this.mockMvc.perform(get("/persons"))
                     .andExpect(status().isOk())
-                    .andExpect(jsonPath("$.size()",is(personList.size())));
+                    .andExpect(jsonPath("$.size()",is(personList.size())))
+                    .andDo(document("{methodName}",
+                    preprocessRequest(prettyPrint()),
+                    preprocessResponse(prettyPrint())));
+     
 
     }
 
     @Test
     void getPersonById() throws Exception {
         Person person = new Person(1,"Pranay","password","email");
-        given(personService.getPersonById(person.getId())).willReturn(person);
+        given(personRepository.getById(person.getId())).willReturn(person);
         
         this.mockMvc.perform(get("/persons/{id}",person.getId()))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.name",is(person.getPersonName())))
                     .andExpect(jsonPath("$.password",is(person.getPassword())))
-                    .andExpect(jsonPath("$.email",is(person.getEmail())));
+                    .andExpect(jsonPath("$.email",is(person.getEmail())))
+                     .andDo(document("{methodName}",
+                    preprocessRequest(prettyPrint()),
+                    preprocessResponse(prettyPrint())));
+     
                     
     }
 
     @Test
     void getByName() throws Exception {
         Person person = new Person(1,"Pranay","password","email");
-        given(personService.getByName(person.getPersonName())).willReturn(person);
+        given(personRepository.getByName(person.getPersonName())).willReturn(person);
         
         this.mockMvc.perform(get("/persons/name/{name}",person.getPersonName()))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.name",is(person.getPersonName())))
                     .andExpect(jsonPath("$.password",is(person.getPassword())))
-                    .andExpect(jsonPath("$.email",is(person.getEmail())));
-                    
+                    .andExpect(jsonPath("$.email",is(person.getEmail())))
+                    .andDo(document("{methodName}",
+                    preprocessRequest(prettyPrint()),
+                    preprocessResponse(prettyPrint())));
+                         
     }
 }

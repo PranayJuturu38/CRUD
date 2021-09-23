@@ -14,6 +14,7 @@ import com.crudapp.main.model.Project;
 import com.crudapp.main.repository.Projectrepository;
 import com.crudapp.main.service.ProjectService;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,14 +29,21 @@ public class ProjectTests {
 	@Mock
 	Projectrepository mockProjectRepository;
 
-	@Test // POST Mapping "/projects" Happy TestCase //Mockito
+	@BeforeEach
+	void setUp(){
+
+		Project project1 = new Project(1,"name", "used by patients");
+	    
+	}
+	 @Test // POST Mapping "/projects" Happy TestCase //Mockito
 	void projectSaved() {
+	
 		Project expectedProject = new Project();
 		expectedProject.setId(1);
 		expectedProject.setName("MobileApplication");
 		expectedProject.setDescription("used by patients");
 
-		// projectService.saveproject(expectedproject);
+		projectService.saveProject(expectedProject);
 
 		when(mockProjectRepository.save(expectedProject)).thenReturn(expectedProject);
 		Project actualProject = projectService.saveProject(expectedProject);
@@ -67,7 +75,7 @@ public class ProjectTests {
 		// Checking the project in the repo
 		when(mockProjectRepository.findById(expectedProject.getId())).thenReturn(Optional.of(expectedProject));
 
-		projectService.saveProject(expectedProject);// saving in the db
+		//projectService.saveProject(expectedProject);// saving in the db
 
 		Project actualProject = projectService.getProjectById(expectedProject.getId());
 
@@ -84,7 +92,7 @@ public class ProjectTests {
 		expectedProject.setDescription("used by patients");
 
 		when(mockProjectRepository.findById(expectedProject.getId())).thenReturn(Optional.empty());
-		projectService.saveProject(expectedProject);
+		//projectService.saveProject(expectedProject);
 		Project actualProject = new Project();
 		try {
 			actualProject = projectService.getProjectById(2);
@@ -153,7 +161,6 @@ public class ProjectTests {
 	@Test // Get all //mockito //
 	void getAllProjects() {
 		Project expectedProject = new Project(1, "local", "used by staff");
-		;
 		Project p1 = new Project(2, "web", "used by patients");
 		Project p2 = new Project(3, "mobile", "used by patients");
 
@@ -163,7 +170,7 @@ public class ProjectTests {
 		expectedList.add(p2);
 
 		when(mockProjectRepository.findAll()).thenReturn(expectedList);
-		projectService.saveProject(expectedProject);
+	//	projectService.saveProject(expectedProject);
 		projectService.saveProject(p1);
 		projectService.saveProject(p2);
 
@@ -176,7 +183,6 @@ public class ProjectTests {
 	@Test // mockito //
 	void getAllProjectsFails() throws Exception {
 		Project expectedProject = new Project(1, "local", "used by staff");
-		;
 		Project p1 = new Project(2, "web", "used by patients");
 		Project p2 = new Project(3, "mobile", "used by patients");
 
