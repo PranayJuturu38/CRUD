@@ -25,7 +25,6 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 @WebMvcTest(controllers = PersonController.class)
 @AutoConfigureRestDocs(outputDir = "target/generated-snippets")
-@AutoConfigureMockMvc
 public class PersonControllerTests {
     @Autowired
     private MockMvc mockMvc;

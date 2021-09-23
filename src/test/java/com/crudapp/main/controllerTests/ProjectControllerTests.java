@@ -11,6 +11,7 @@ import com.crudapp.main.service.ProjectService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -40,7 +41,7 @@ public class ProjectControllerTests {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @MockBean
+    @Mock
     private Projectrepository projectRepo;
 
     List<Project> projectList = new ArrayList<Project>();
